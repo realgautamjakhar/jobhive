@@ -62,7 +62,7 @@ const SideBar = ({ job }: { job: Job }) => {
           height={100}
           src={job.company.logo}
           alt={job.company.name}
-          className="m-auto aspect-square max-w-[8rem]"
+          className="m-auto aspect-square max-w-[8rem] object-contain"
         />
 
         <Link
