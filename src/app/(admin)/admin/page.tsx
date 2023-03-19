@@ -1,15 +1,9 @@
 "use client";
-import type { Metadata } from "next";
 import { useSession } from "next-auth/react";
 import { BiAlarm, BiBuildings, BiGridAlt } from "react-icons/bi";
 import LinkIcon from "~/components/button/LinkIcon";
 import AdminCompanyList from "./components/AdminCompanyList";
 import AdminJobList from "./components/AdminJobList";
-
-export const metadata: Metadata = {
-  title: "Admin Page",
-  icons: "/assets/logo/brandIcon.svg",
-};
 
 const AdminPage = () => {
   const { data: session } = useSession();
