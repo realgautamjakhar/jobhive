@@ -38,7 +38,7 @@ const PrimaryButton = ({
       }}
       title={title}
       disabled={disable}
-      className={`text-white ${className} flex   items-center justify-center  rounded-md bg-dark-500 py-2.5 px-2 capitalize  `}
+      className={`text-white ${className} flex   items-center justify-center  rounded-full bg-dark-500 py-2.5 px-2 capitalize  `}
       onClick={onClick}
     >
       {loading ? (

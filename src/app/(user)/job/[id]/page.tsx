@@ -53,9 +53,10 @@ const JobPage = async ({ params: { id } }: Params) => {
     },
   });
   return (
-    <main className=" mx-auto grid h-full w-full max-w-6xl py-10 px-4 md:grid-cols-[70%_1fr] ">
+    <main className=" mx-auto grid h-full w-full max-w-7xl gap-6 px-4 pb-16 md:grid-cols-[72%_1fr] md:py-10 ">
       <JobAdminControl jobId={job.id} />
-      <div className="">
+
+      <div>
         <JobHeader job={job} />
         <div>
           <h2 className=" py-4 text-[clamp(1rem,10vw,1.5rem)] font-medium capitalize">

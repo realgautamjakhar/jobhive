@@ -4,7 +4,7 @@ import React from "react";
 import { motionContainer } from "~/utils/animation";
 import { api } from "~/utils/api";
 import CompanyCard from "./CompanyCard";
-import CompanyCardSkeleton from "./CompanyCardSkeleton";
+import CompanyCardSkeleton from "../../../../components/skeleton/CompanyCardSkeleton";
 
 const AdminCompanyList = () => {
   const { data: companies, isLoading } = api.company.getAll.useQuery(
@@ -16,7 +16,7 @@ const AdminCompanyList = () => {
   });
   if (isLoading) {
     return (
-      <ul className=" grid h-fit grid-cols-[repeat(auto-fit,clamp(150px,30vw,175px))]  gap-4 p-4">
+      <ul className=" grid h-fit  gap-6 md:grid-cols-[repeat(auto-fit,clamp(150px,30vw,175px))]">
         {skeleton}
       </ul>
     );

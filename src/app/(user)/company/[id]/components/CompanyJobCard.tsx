@@ -34,7 +34,7 @@ const JobCard = ({ job }: { job: Job }) => {
       whileHover={{
         scale: 1.025,
       }}
-      className=" grid items-center gap-2 rounded-md bg-light-100 p-4 shadow-2xl shadow-dark-100/10 hover:shadow-accent-100 sm:grid-cols-[1fr_auto]"
+      className=" grid items-center gap-2 rounded-2xl bg-light-100 p-4 shadow-2xl shadow-dark-100/10 hover:shadow-accent-100 sm:grid-cols-[1fr_auto]"
     >
       <Link href={`/job/${job.id}`}>
         <h2 className="font-medium capitalize line-clamp-2">

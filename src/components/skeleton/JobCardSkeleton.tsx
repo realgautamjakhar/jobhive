@@ -1,6 +1,6 @@
 const JobCardSkeleton = () => {
   return (
-    <li className=" grid items-center gap-2 rounded-md bg-light-100 p-4 shadow-2xl shadow-accent-100/50 hover:shadow-accent-100 md:grid-cols-[1fr_auto]">
+    <li className=" grid items-center gap-2 rounded-2xl bg-light-100 p-4 shadow-2xl shadow-accent-100/50 hover:shadow-accent-100 md:grid-cols-[1fr_auto]">
       <div className="grid  grid-cols-[auto_1fr] grid-rows-[3,auto] items-center gap-y-2 gap-x-4  ">
         <img className=" skeleton aspect-square h-full h-10  overflow-hidden  rounded-full object-contain md:row-span-3 md:h-20" />
         <h2 className="font-medium capitalize line-clamp-2">

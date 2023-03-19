@@ -14,6 +14,7 @@ import {
   BiRupee,
 } from "react-icons/bi";
 import { BsEmojiNeutral } from "react-icons/bs";
+import PrimaryButton from "~/components/button/PrimaryButton";
 import { motionContainer, motionItem } from "~/utils/animation";
 import type { RouterOutputs } from "~/utils/api";
 
@@ -31,13 +32,13 @@ const InfoCard = ({
   return (
     <motion.li
       variants={motionItem}
-      className="flex items-center justify-between rounded-md bg-accent-300 p-4 capitalize shadow-2xl shadow-accent-400"
+      className="flex items-center justify-between rounded-full bg-accent-600 p-4 px-6  capitalize shadow-2xl shadow-accent-600"
     >
       <div className=" flex items-center gap-2 text-sm">
         <Icon size={18} />
         {prefix}
       </div>
-      {suffix}
+      <p className=" text-sm capitalize">{suffix.toLowerCase()}</p>
     </motion.li>
   );
 };
@@ -53,18 +54,17 @@ const SideBar = ({ job }: { job: Job }) => {
         opacity: 1,
         y: 0,
       }}
-      className=" grid h-fit grid-rows-[200px_1fr] rounded-md bg-accentGradientV2 text-gray-100 shadow-2xl shadow-accent-300"
+      className=" grid h-fit grid-rows-[200px_1fr] rounded-2xl bg-accentGradientV2 text-white shadow-2xl shadow-accent-500/50"
     >
-      <div className=" grid grid-rows-[1fr_auto] justify-center bg-light-100/30">
-        <div className=" flex flex-col items-center justify-center">
-          <Image
-            width={100}
-            height={100}
-            src={job.company.logo}
-            alt={job.company.name}
-            className="max-w-[10rem]"
-          />
-        </div>
+      <div className=" grid grid-rows-[1fr_auto] justify-center rounded-b-3xl bg-light-100/30">
+        <Image
+          width={100}
+          height={100}
+          src={job.company.logo}
+          alt={job.company.name}
+          className="m-auto aspect-square max-w-[8rem]"
+        />
+
         <Link
           href={`/company/${job.company.id}`}
           className=" flex items-center gap-2 py-4 text-sm underline"
@@ -114,12 +114,10 @@ const SideBar = ({ job }: { job: Job }) => {
             icon={BiMapPin}
           />
         )}
-        <motion.a
-          variants={motionContainer}
-          href={job?.applyUrl}
-          className={`mt-4  inline-flex cursor-pointer items-center justify-center gap-2  rounded-md bg-dark-500  py-2.5 px-2 capitalize text-white hover:scale-105  `}
-        >
-          Apply Here <BiLink size={18} />
+        <motion.a variants={motionContainer} href={job?.applyUrl}>
+          <PrimaryButton className="w-full">
+            Apply Here <BiLink size={18} />
+          </PrimaryButton>
         </motion.a>
       </motion.ul>
     </motion.div>

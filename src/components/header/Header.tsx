@@ -31,9 +31,11 @@ const Header = () => {
                 />
                 <p>{session?.user?.name}</p>
               </li> */}
-              <li className=" flex items-center gap-2">
-                <Link href="/admin">Admin</Link>
-              </li>
+              {session?.user.isAdmin && (
+                <li className=" flex items-center gap-2">
+                  <Link href="/admin">Admin</Link>
+                </li>
+              )}
               <li>
                 <SecondaryButton
                   className=" text-gray-700"

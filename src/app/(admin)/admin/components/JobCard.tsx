@@ -8,6 +8,7 @@ import { BiBriefcase, BiRupee } from "react-icons/bi";
 import TimeAgoComponent from "~/components/TimeAgo";
 import { motionItem } from "~/utils/animation";
 import type { RouterOutputs } from "~/utils/api";
+import AdminJobCardControl from "./AdminJobCardControl";
 
 type Job = RouterOutputs["job"]["getAll"][0];
 
@@ -29,7 +30,6 @@ const TextItem = ({
 };
 
 const JobCard = ({ job }: { job: Job }) => {
-  const { data: session } = useSession();
   return (
     <motion.li
       variants={motionItem}
@@ -107,9 +107,8 @@ const JobCard = ({ job }: { job: Job }) => {
       >
         Apply
       </motion.a>
-      {session?.user.isAdmin && (
-        <motion.a href={`/admin/edit/job/${job.id}`}>Edit</motion.a>
-      )}
+
+      <AdminJobCardControl jobId={job.id} />
     </motion.li>
   );
 };

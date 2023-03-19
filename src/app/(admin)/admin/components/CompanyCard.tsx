@@ -13,7 +13,7 @@ const CompanyCard = ({ company }: { company: Company }) => {
     <motion.li
       variants={motionItem}
       whileHover={{ scale: 1.025 }}
-      className="group relative grid grid-cols-[1fr_auto] rounded-md  bg-light-100 p-4 shadow-2xl  shadow-accent-100/50 md:grid-cols-1  "
+      className="group relative grid grid-cols-[1fr_auto] rounded-2xl  bg-light-100 p-4 shadow-2xl  shadow-accent-100/50 md:grid-cols-1  "
     >
       <Link
         href={`/company/${company.id}`}

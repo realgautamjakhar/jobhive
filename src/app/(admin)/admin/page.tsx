@@ -1,12 +1,13 @@
 "use client";
 import { useSession } from "next-auth/react";
-import { BiAlarm, BiBuildings, BiGridAlt } from "react-icons/bi";
+import { BiAlarm, BiBuildings } from "react-icons/bi";
 import LinkIcon from "~/components/button/LinkIcon";
 import AdminCompanyList from "./components/AdminCompanyList";
 import AdminJobList from "./components/AdminJobList";
 
 const AdminPage = () => {
   const { data: session } = useSession();
+  if (!session?.user.isAdmin) return null;
   return (
     <main className=" mx-auto w-full max-w-7xl py-10">
       <div className="flex w-full flex-wrap items-center justify-center gap-4">

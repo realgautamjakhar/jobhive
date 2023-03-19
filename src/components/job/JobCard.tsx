@@ -33,7 +33,7 @@ const JobCard = ({ job }: { job: Job }) => {
       whileHover={{
         scale: 1.025,
       }}
-      className=" grid items-center gap-2 rounded-md bg-light-100 p-4 shadow-2xl shadow-accent-100/50 hover:shadow-accent-100 md:grid-cols-[1fr_auto]"
+      className=" grid items-center gap-2 rounded-2xl bg-light-100 p-4 shadow-2xl shadow-accent-100/50 hover:shadow-accent-100 md:grid-cols-[1fr_auto]"
     >
       <Link
         href={`/job/${job.id}`}
@@ -84,26 +84,35 @@ const JobCard = ({ job }: { job: Job }) => {
           />
         </ul>
       </Link>
-      <motion.a
-        href={job.applyUrl}
-        initial={{
-          scale: 0,
-          opacity: 0,
-        }}
-        animate={{
-          scale: 1,
-          opacity: 1,
-        }}
-        whileHover={{
-          scale: 1.05,
-          opacity: 0.7,
-        }}
-        title={`${job.title.toLowerCase()} apply link `}
-        target="_blank"
-        className=" cursor-pointer rounded-full bg-accent-500 px-4 py-2 text-center text-sm text-white shadow-xl shadow-accent-100/50 "
-      >
-        Apply
-      </motion.a>
+      <div className=" grid grid-cols-2 md:grid-cols-1">
+        <Link
+          href={`/job/${job.id}`}
+          title={`${job.title.toLowerCase()} More details `}
+          className=" cursor-pointer px-4  py-2 text-center text-sm text-gray-700 md:hidden  "
+        >
+          More Details
+        </Link>
+        <motion.a
+          href={job.applyUrl}
+          initial={{
+            scale: 0,
+            opacity: 0,
+          }}
+          animate={{
+            scale: 1,
+            opacity: 1,
+          }}
+          whileHover={{
+            scale: 1.05,
+            opacity: 0.7,
+          }}
+          title={`${job.title.toLowerCase()} apply link `}
+          target="_blank"
+          className=" cursor-pointer rounded-full bg-accent-500 px-4 py-2 text-center text-sm text-white shadow-xl shadow-accent-100/75 "
+        >
+          Apply
+        </motion.a>
+      </div>
     </motion.li>
   );
 };

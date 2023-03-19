@@ -22,12 +22,14 @@ export async function generateMetadata({
   });
   if (!company.name)
     return {
-      title: "Job looo",
+      title: "Joh Hive",
     };
   return {
     title: company.name,
   };
 }
+
+export const revalidate = 60;
 
 const CompanyPage = async ({ params: { id } }: Params) => {
   const company = await prisma.company.findUnique({
@@ -41,13 +43,7 @@ const CompanyPage = async ({ params: { id } }: Params) => {
   return (
     <main className=" mx-auto h-full w-full max-w-7xl py-10 px-4">
       <CompanyAdminControl companyId={company.id} />
-      <div className=" relative grid grid-cols-[minmax(auto,30%)_1fr] rounded-md bg-accentGradient shadow-2xl shadow-accent-100 ">
-        {/* {session?.user.isAdmin && (
-          <div className="  absolute top-4 right-4">
-            <UpdateCompanyModal company={company} />
-          </div>
-        )} */}
-
+      <div className=" relative grid grid-cols-[minmax(auto,30%)_1fr] rounded-2xl bg-accentGradient shadow-2xl shadow-accent-100 ">
         <div className="  flex h-full w-full md:bg-white/25">
           <Image
             src={company?.logo}
@@ -99,3 +95,9 @@ const CompanyPage = async ({ params: { id } }: Params) => {
 };
 
 export default CompanyPage;
+export async function generateStaticParams() {
+  const companies = await prisma.company.findMany();
+  return companies.map((company) => ({
+    id: company.id.toString(),
+  }));
+}
