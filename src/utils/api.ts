@@ -4,7 +4,7 @@
  *
  * We also create a few inference helpers for input and output types.
  */
-import { httpBatchLink, loggerLink } from "@trpc/client";
+import { httpBatchLink, httpLink, loggerLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
@@ -27,7 +27,6 @@ export const api = createTRPCNext<AppRouter>({
        * @see https://trpc.io/docs/data-transformers
        */
       transformer: superjson,
-
       /**
        * Links used to determine request flow from client to server.
        *
@@ -39,10 +38,26 @@ export const api = createTRPCNext<AppRouter>({
             process.env.NODE_ENV === "development" ||
             (opts.direction === "down" && opts.result instanceof Error),
         }),
-        httpBatchLink({
+        httpLink({
           url: `${getBaseUrl()}/api/trpc`,
         }),
       ],
+
+      abortOnUnmount: true,
+      queryClientConfig: {
+        defaultOptions: {
+          queries: {
+            refetchOnMount: false,
+            cacheTime: 1000 * 60 * 5,
+            staleTime: 1000 * 60 * 5,
+            retry: 3,
+            refetchOnReconnect: false,
+            refetchOnWindowFocus: false,
+            retryDelay: (attemptIndex) =>
+              Math.min(1000 * 2 ** attemptIndex, 30000),
+          },
+        },
+      },
     };
   },
   /**
@@ -50,7 +65,20 @@ export const api = createTRPCNext<AppRouter>({
    *
    * @see https://trpc.io/docs/nextjs#ssr-boolean-default-false
    */
-  ssr: false,
+  ssr: true,
+  // responseMeta({ clientErrors, ctx }) {
+  //   if (clientErrors.length) {
+  //     // propagate first http error from API calls
+  //     return {
+  //       status: clientErrors[0].data?.httpStatus ?? 500,
+  //     };
+  //   }
+  //   // cache full page for 1 day + revalidate once every second
+  //   const ONE_DAY_IN_SECONDS = 60 * 60 * 24;
+  //   return {
+  //     "Cache-Control": `s-maxage=1, stale-while-revalidate=${ONE_DAY_IN_SECONDS}`,
+  //   };
+  // },
 });
 
 /**
