@@ -37,7 +37,7 @@ const Search = () => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className=" relative mx-auto my-16  flex w-full max-w-2xl items-center justify-center rounded-full bg-light-100 p-2 shadow-2xl shadow-accent-100 "
+      className=" relative mx-auto my-16  flex w-full max-w-2xl items-center justify-center rounded-full bg-white p-2 shadow-2xl shadow-accent-100 "
     >
       <input
         type="text"
