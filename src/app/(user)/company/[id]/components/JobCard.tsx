@@ -13,7 +13,7 @@ import TimeAgoComponent from "~/components/TimeAgo";
 import { motionItem } from "~/utils/animation";
 import type { RouterOutputs } from "~/utils/api";
 
-type Job = RouterOutputs["job"]["getAll"][0];
+type Job = RouterOutputs["job"]["create"];
 
 const TextItem = ({
   prefix,
