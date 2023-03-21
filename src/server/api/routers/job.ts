@@ -7,7 +7,7 @@ import {
 } from "~/server/api/trpc";
 import { prisma } from "~/server/db";
 export const jobRouter = createTRPCRouter({
-  getAll: publicProcedure.query(() => {
+  adminGetAllJobs: publicProcedure.query(() => {
     return prisma.job.findMany({
       include: {
         company: true,
@@ -17,29 +17,19 @@ export const jobRouter = createTRPCRouter({
       },
     });
   }),
-  getAllJobs: publicProcedure
+
+  getAllJobsShowMore: publicProcedure
     .input(
       z.object({
         skip: z.number().default(0),
-        category: z.string().optional(),
-        subCategory: z.string().optional(),
       })
     )
     .mutation(async ({ input }) => {
       const limit = 5;
       const jobs = await prisma.job.findMany({
         where: {
-          OR: {
-            category: {
-              name: {
-                contains: input?.category ? input.category : "",
-              },
-            },
-            subCategory: {
-              name: {
-                contains: input?.subCategory ? input.subCategory : "",
-              },
-            },
+          approved: {
+            equals: true,
           },
         },
         include: {
@@ -60,38 +50,8 @@ export const jobRouter = createTRPCRouter({
         hasMore,
       };
     }),
-  infiniteJobs: publicProcedure
-    .input(
-      z.object({
-        limit: z.number().min(1).max(100).nullish(),
-        cursor: z.string().nullish(), // <-- "cursor" needs to exist, but can be any type
-      })
-    )
-    .query(async ({ input }) => {
-      const { cursor, limit } = input;
 
-      const jobs = await prisma.job.findMany({
-        include: {
-          company: true,
-        },
-        take: limit + 1,
-        cursor: cursor ? { id: cursor } : undefined,
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
-      let nextCursor: typeof cursor | undefined = undefined;
-
-      if (jobs.length > limit) {
-        const nextItem = jobs.pop() as (typeof jobs)[number];
-
-        nextCursor = nextItem.id;
-      }
-      return {
-        jobs,
-        nextCursor,
-      };
-    }),
+  //Get single Jobs listing
   get: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(({ input }) => {
@@ -106,6 +66,7 @@ export const jobRouter = createTRPCRouter({
         },
       });
     }),
+  //Job Search Quick Search (Home of the website)
   getSearch: publicProcedure
     .input(z.object({ searchTerm: z.string() }))
     .mutation(({ ctx, input }) => {

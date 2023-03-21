@@ -27,7 +27,7 @@ export const motionItem = {
 };
 
 const JobList = () => {
-  const getJobs = api.job.getAllJobs.useMutation();
+  const getJobs = api.job.getAllJobsShowMore.useMutation();
   const [jobs, setJobs] = useState(getJobs.data?.jobs);
   const [hasMore, setHasMore] = useState(false);
 

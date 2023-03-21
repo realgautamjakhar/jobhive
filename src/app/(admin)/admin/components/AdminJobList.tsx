@@ -1,11 +1,9 @@
 "use client";
 import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { api } from "~/utils/api";
 import JobCard from "./JobCard";
 import JobCardSkeleton from "../../../../components/skeleton/JobCardSkeleton";
-import SecondaryButton from "~/components/button/SecondaryButton";
-
 export const motionContainer = {
   hidden: { opacity: 1 },
   visible: {
@@ -27,7 +25,8 @@ export const motionItem = {
 };
 
 const JobList = () => {
-  const { data: jobs, refetch: refetchJobs } = api.job.getAll.useQuery();
+  const { data: jobs, refetch: refetchJobs } =
+    api.job.adminGetAllJobs.useQuery();
 
   const skeleton = [...Array(8).keys()].map((i) => {
     return <JobCardSkeleton key={i} />;
