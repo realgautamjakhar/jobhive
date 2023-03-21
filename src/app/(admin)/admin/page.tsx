@@ -1,6 +1,6 @@
 "use client";
 import { useSession } from "next-auth/react";
-import { BiAlarm, BiBuildings } from "react-icons/bi";
+import { BiAlarm, BiBuildings, BiCategory } from "react-icons/bi";
 import LinkIcon from "~/components/button/LinkIcon";
 import AdminCompanyList from "./components/AdminCompanyList";
 import AdminJobList from "./components/AdminJobList";
@@ -17,6 +17,7 @@ const AdminPage = () => {
           title="List Company"
           icon={BiBuildings}
         />
+        <LinkIcon href="/admin/category" title="Categories" icon={BiCategory} />
       </div>
       <div className=" grid grid-cols-2 gap-6 py-10 px-4">
         <AdminCompanyList />

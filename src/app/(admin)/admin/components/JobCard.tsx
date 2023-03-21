@@ -22,14 +22,14 @@ const TextItem = ({
   icon: IconType;
 }) => {
   return (
-    <li className="  flex  items-center gap-1 text-sm capitalize">
+    <li className="  flex  items-center gap-1 text-xs capitalize">
       <Icon size={18} className="text-accent-400" title={prefix ?? ""} />
       <span className="text-sm text-gray-800">{suffix}</span>
     </li>
   );
 };
 
-const JobCard = ({ job }: { job: Job }) => {
+const JobCard = ({ job, refetch }: { job: Job; refetch: () => void }) => {
   return (
     <motion.li
       variants={motionItem}
@@ -108,7 +108,7 @@ const JobCard = ({ job }: { job: Job }) => {
         Apply
       </motion.a>
 
-      <AdminJobCardControl jobId={job.id} />
+      <AdminJobCardControl refetch={refetch} jobId={job.id} />
     </motion.li>
   );
 };

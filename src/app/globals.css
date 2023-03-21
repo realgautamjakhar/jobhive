@@ -37,6 +37,12 @@ input[type="number"] {
   -moz-appearance: none;
 }
 
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: "";
+}
 /* //Check box  */
 
 .addon-checkbox {
@@ -164,9 +170,9 @@ input[type="number"] {
 
 @keyframes skeleton-loading {
   0% {
-    background-color: hsl(0, 0%, 94%);
+    background-color: theme("colors.gray.100");
   }
   100% {
-    background-color: hsl(0, 0%, 83%);
+    background-color: theme("colors.gray.200");
   }
 }

@@ -37,7 +37,7 @@ const ImageUpload = ({
     multiple: false,
   });
   return (
-    <div className=" grid grid-cols-2 py-4 ring-2 ring-accent-400">
+    <div className=" grid grid-cols-2 py-4 px-4 ring-2 ring-accent-400">
       <div {...getRootProps()} className="flex items-center justify-center">
         <input {...getInputProps()} />
         <p className=" text-center text-xs">
@@ -48,7 +48,7 @@ const ImageUpload = ({
         <div className=" mx-auto">
           <Image
             src={base64}
-            className="flex aspect-square w-20 items-center justify-center rounded-md object-cover"
+            className="flex aspect-square w-20 items-center justify-center rounded-md object-contain "
             alt="preview Image"
             width={100}
             height={100}

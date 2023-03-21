@@ -27,46 +27,11 @@ export const motionItem = {
 };
 
 const JobList = () => {
-  const getJobs = api.job.getAllJobs.useMutation();
-  const [jobs, setJobs] = useState(getJobs.data?.jobs);
-  const [hasMore, setHasMore] = useState(false);
-
-  async function fetchJobs() {
-    const skip = jobs?.length || 0;
-    //Backend is working on pagination like infinite scroll you have to add the previous job remove the duplicated and create whole new jobs and set to the state
-    const newData = await getJobs.mutateAsync({ skip }); //Return new 5 jobs
-    const uniqueJobs = removeDuplicates([
-      ...(jobs || []),
-      ...(newData?.jobs || []),
-    ]);
-    // const allJobs = [...(jobs || []), ...(newData?.jobs || [])];
-    setJobs(uniqueJobs);
-    setHasMore(newData.hasMore);
-  }
-
-  function removeDuplicates(jobs: any) {
-    const jobSet = new Set();
-    return jobs.filter((job) => {
-      if (jobSet.has(job.id)) {
-        return false;
-      } else {
-        jobSet.add(job.id);
-        return true;
-      }
-    });
-  }
-
-  useEffect(() => {
-    fetchJobs();
-  }, []);
+  const { data: jobs, refetch: refetchJobs } = api.job.getAll.useQuery();
 
   const skeleton = [...Array(8).keys()].map((i) => {
     return <JobCardSkeleton key={i} />;
   });
-
-  if (getJobs.isLoading && !jobs?.length) {
-    return;
-  }
 
   return (
     <>
@@ -78,18 +43,8 @@ const JobList = () => {
           className="grid gap-6 "
         >
           {jobs?.map((job) => {
-            return <JobCard job={job} key={job.id} />;
+            return <JobCard refetch={refetchJobs} job={job} key={job.id} />;
           })}
-          {hasMore && (
-            <SecondaryButton
-              onClick={() => fetchJobs()}
-              className=" relative rounded-full  bg-dark-500 py-2 text-white"
-              loading={getJobs.isLoading}
-              disable={getJobs.isLoading}
-            >
-              Load More
-            </SecondaryButton>
-          )}
         </motion.ul>
       ) : (
         <ul className="grid gap-6 ">{skeleton}</ul>

@@ -21,11 +21,27 @@ export const jobRouter = createTRPCRouter({
     .input(
       z.object({
         skip: z.number().default(0),
+        category: z.string().optional(),
+        subCategory: z.string().optional(),
       })
     )
     .mutation(async ({ input }) => {
       const limit = 5;
       const jobs = await prisma.job.findMany({
+        where: {
+          OR: {
+            category: {
+              name: {
+                contains: input?.category ? input.category : "",
+              },
+            },
+            subCategory: {
+              name: {
+                contains: input?.subCategory ? input.subCategory : "",
+              },
+            },
+          },
+        },
         include: {
           company: true,
         },
@@ -104,7 +120,7 @@ export const jobRouter = createTRPCRouter({
             mode: "insensitive",
           },
         },
-        take: 10,
+        take: 5,
         include: {
           company: true,
           category: true,

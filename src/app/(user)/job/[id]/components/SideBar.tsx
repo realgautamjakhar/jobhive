@@ -32,6 +32,9 @@ const InfoCard = ({
   return (
     <motion.li
       variants={motionItem}
+      transition={{
+        type: "spring",
+      }}
       className="flex items-center justify-between rounded-full bg-accent-600 p-4 px-6  capitalize shadow-2xl shadow-accent-600"
     >
       <div className=" flex items-center gap-2 text-sm">

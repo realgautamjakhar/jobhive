@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { AiFillLinkedin, AiOutlineGlobal } from "react-icons/ai";
-import { FiArrowUpRight } from "react-icons/fi";
 import { motionItem } from "~/utils/animation";
 import type { RouterOutputs } from "~/utils/api";
 
@@ -13,7 +12,10 @@ const CompanyCard = ({ company }: { company: Company }) => {
     <motion.li
       variants={motionItem}
       whileHover={{ scale: 1.025 }}
-      className="group relative grid grid-cols-[1fr_auto] rounded-2xl  bg-white p-4 shadow-2xl  shadow-accent-100/50 md:grid-cols-1  "
+      transition={{
+        type: "spring",
+      }}
+      className="group relative grid grid-cols-[1fr_auto] rounded-2xl bg-white p-4   shadow-2xl shadow-accent-100/50 hover:shadow-accent-200  hover:ring-2 hover:ring-accent-200  md:grid-cols-1"
     >
       <Link
         href={`/company/${company.id}`}
@@ -24,25 +26,21 @@ const CompanyCard = ({ company }: { company: Company }) => {
           width={75}
           height={75}
           src={company.logo}
-          className="m-auto aspect-square h-full max-h-16 w-full object-contain"
+          className="m-auto aspect-square h-full max-h-16 w-full  max-w-[5rem] object-contain"
           alt={company.name}
         />
-        <FiArrowUpRight
-          size={22}
-          className=" absolute top-4 right-4 text-accent-100 group-hover:scale-150"
-        />
         <div className=" grid md:gap-2">
-          <h2 className=" text-xl font-medium capitalize">
+          <h2 className=" text-lg font-medium capitalize line-clamp-1">
             {company.name.toLowerCase()}
           </h2>
-          <div className="  flex w-full gap-4 md:justify-center">
+          <div className="  flex w-full gap-4 text-gray-400 md:justify-center">
             <a
               title={`${company.name} website link`}
               href={company.website}
               target="_blank"
             >
               <AiOutlineGlobal
-                className=" text-accent-300 transition-all duration-300 ease-in-out hover:text-accent-500 "
+                className="  transition-all duration-300 ease-in-out hover:text-accent-500 "
                 size={18}
               />
             </a>
@@ -50,19 +48,12 @@ const CompanyCard = ({ company }: { company: Company }) => {
               title={`${company.name} linkedin profile link`}
               href={company.linkedin}
               target="_blank"
-              className=" text-accent-300 transition-all duration-300 ease-in-out hover:text-accent-500 "
+              className="   transition-all duration-300 ease-in-out hover:text-accent-500 "
             >
               <AiFillLinkedin size={18} />
             </a>
           </div>
-        </div>{" "}
-      </Link>
-      <Link
-        href={`/company/${company.id}`}
-        title={`${company.name} more info and jobs`}
-        className=" mx-auto mt-4 h-fit w-fit rounded-full bg-dark-500  px-4 py-1  text-sm text-gray-100 transition-all duration-300 ease-in-out hover:scale-105"
-      >
-        See jobs
+        </div>
       </Link>
     </motion.li>
   );

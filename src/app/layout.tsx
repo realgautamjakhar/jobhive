@@ -16,7 +16,7 @@ const RootLayout = ({
   return (
     <html lang="en">
       <SessionProvider session={session}>
-        <body className="grid min-h-[100dvh] grid-rows-[auto_1fr] bg-light-500 ">
+        <body className="grid min-h-[100dvh] grid-rows-[auto_1fr] bg-light-500">
           <Header />
           <Toaster />
           {children}

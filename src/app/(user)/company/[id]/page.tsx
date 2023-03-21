@@ -26,6 +26,7 @@ export async function generateMetadata({
     };
   return {
     title: company.name,
+    description: company.desc.replaceAll(/(<([^>]+)>)/gi, "").split(". ")[0],
   };
 }
 
@@ -54,7 +55,7 @@ const CompanyPage = async ({ params: { id } }: Params) => {
           />
         </div>
         <div className=" grid justify-end p-4 px-6">
-          <h2 className="  text-[clamp(1rem,10vw,7rem)] font-medium capitalize text-gray-200">
+          <h2 className="  text-[clamp(1rem,10vw,6rem)] font-medium capitalize text-gray-200">
             {company.name}
           </h2>
           <div className=" flex justify-end gap-4 py-4">

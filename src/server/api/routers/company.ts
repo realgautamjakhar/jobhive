@@ -13,6 +13,32 @@ export const companyRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.company.findMany();
   }),
+  infiniteCompanies: publicProcedure
+    .input(
+      z.object({
+        skip: z.number().default(0),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const limit = 8;
+      const companies = await prisma.company.findMany({
+        orderBy: {
+          jobs: {
+            _count: "desc",
+          },
+        },
+        skip: input.skip,
+        take: limit + 1,
+      });
+      const hasMore = companies?.length > limit;
+      if (hasMore) {
+        companies.pop();
+      }
+      return {
+        companies,
+        hasMore,
+      };
+    }),
   get: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(({ input }) => {

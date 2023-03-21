@@ -37,7 +37,7 @@ const ListCompany = () => {
   const [desc, setDesc] = useState("Company Description");
   const [logo, setLogo] = useState("");
   return (
-    <main className=" mx-auto w-full max-w-2xl pb-16">
+    <main className=" mx-auto w-full max-w-lg px-4 pb-16">
       <h2 className=" py-4 text-[clamp(1rem,6vw,2rem)] font-medium capitalize">
         List New Company
       </h2>

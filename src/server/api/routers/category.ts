@@ -13,20 +13,26 @@ export const categoryRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.category.findMany();
   }),
-  create: publicProcedure
+  create: adminProcedure
     .input(
       z.object({
         name: z.string(),
       })
     )
     .mutation(({ ctx, input }) => {
+      if (!input.name) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Please provide all the necessary information",
+        });
+      }
       return ctx.prisma.category.create({
         data: {
           name: input.name,
         },
       });
     }),
-  delete: publicProcedure
+  delete: adminProcedure
     .input(
       z.object({
         id: z.string(),
@@ -39,7 +45,7 @@ export const categoryRouter = createTRPCRouter({
         },
       });
     }),
-  update: publicProcedure
+  update: adminProcedure
     .input(
       z.object({
         name: z.string(),

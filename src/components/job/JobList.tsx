@@ -60,7 +60,7 @@ const JobList = () => {
     fetchJobs();
   }, []);
 
-  const skeleton = [...Array(8).keys()].map((i) => {
+  const skeleton = [...Array(5).keys()].map((i) => {
     return <JobCardSkeleton key={i} />;
   });
 
@@ -77,14 +77,18 @@ const JobList = () => {
             return <JobCard job={job} key={job.id} />;
           })}
           {hasMore && (
-            <SecondaryButton
-              onClick={() => fetchJobs()}
-              className=" relative rounded-full  bg-dark-500 py-2 text-white"
-              loading={getJobs.isLoading}
-              disable={getJobs.isLoading}
+            <motion.li
+              variants={motionItem}
+              className=" relative grid items-center gap-2 rounded-2xl bg-white p-4 shadow-2xl shadow-accent-100/50 hover:shadow-accent-100  hover:ring-2 hover:ring-accent-200 "
             >
-              Load More
-            </SecondaryButton>
+              <SecondaryButton
+                onClick={() => fetchJobs()}
+                loading={getJobs.isLoading}
+                disable={getJobs.isLoading}
+              >
+                Load More
+              </SecondaryButton>
+            </motion.li>
           )}
         </motion.ul>
       ) : (

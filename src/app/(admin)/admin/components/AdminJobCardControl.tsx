@@ -4,15 +4,16 @@ import React from "react";
 import { toast } from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { BiEdit } from "react-icons/bi";
-import SecondaryButton from "~/components/button/SecondaryButton";
+import ConfirmModal from "~/components/modal/ConfirmModal";
 import { api } from "~/utils/api";
 
-const AdminJobCardControl = ({ jobId }) => {
+const AdminJobCardControl = ({ jobId, refetch }) => {
   const { data: session } = useSession();
   if (!session?.user.isAdmin) return null;
   const deleteJob = api.job.deleteJob.useMutation({
     onSuccess: () => {
       toast.success("Deleted Successfully");
+      refetch();
     },
     onError: () => {
       toast.error(`Something went wrong ${deleteJob?.error?.message}`);
@@ -24,6 +25,7 @@ const AdminJobCardControl = ({ jobId }) => {
         id: jobId,
       });
   };
+
   return (
     <div className=" mt-4 ml-auto flex items-center gap-4">
       <Link title={`Edit page link for job`} href={`/admin/edit/job/${jobId}`}>
@@ -32,14 +34,13 @@ const AdminJobCardControl = ({ jobId }) => {
           className="text-accent-500 transition-all duration-300 ease-in-out hover:scale-110"
         />
       </Link>
-      <SecondaryButton
-        title="Delete Button"
+      <ConfirmModal
+        title="Delete"
         loading={deleteJob.isLoading}
-        disable={deleteJob.isLoading}
-        onClick={handleDelete}
-      >
-        <AiOutlineDelete size={22} className="text-red-400" />
-      </SecondaryButton>
+        subTitle="You want to delete this job listing from our site ???"
+        button={<AiOutlineDelete size={22} className="text-red-400" />}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 };

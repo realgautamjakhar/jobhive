@@ -1,7 +1,14 @@
 "use client";
 import React from "react";
 import type { IconType } from "react-icons";
-import { BiBriefcase, BiBuildings, BiRupee } from "react-icons/bi";
+import {
+  BiBriefcase,
+  BiBuildings,
+  BiCodeBlock,
+  BiDirections,
+  BiLayout,
+  BiRupee,
+} from "react-icons/bi";
 import { BsPinMap } from "react-icons/bs";
 import TimeAgoComponent from "~/components/TimeAgo";
 import type { RouterOutputs } from "~/utils/api";
@@ -43,7 +50,7 @@ const JobHeader = ({ job }: { job: Job }) => {
           {job.workPlace.replaceAll("_", " ").toLowerCase()}
         </p>
       </div>
-      <ul className=" grid gap-2  py-4">
+      <ul className=" grid gap-2  py-4 md:grid-cols-2">
         <TextItem
           prefix="Company"
           suffix={job.company.name}
@@ -71,6 +78,17 @@ const JobHeader = ({ job }: { job: Job }) => {
               : "Not Disclosed"
           }
           icon={BiBriefcase}
+        />
+
+        <TextItem
+          prefix="Department"
+          suffix={job?.category.name}
+          icon={BiDirections}
+        />
+        <TextItem
+          prefix="Role"
+          suffix={job?.subCategory.name}
+          icon={BiCodeBlock}
         />
       </ul>
     </div>

@@ -1,18 +1,14 @@
 import { motion } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import type { IconType } from "react-icons";
 import {
   BiBriefcase,
   BiBuildings,
   BiHomeAlt,
-  BiLocationPlus,
   BiMap,
-  BiPin,
   BiRupee,
   BiTimeFive,
 } from "react-icons/bi";
-import { BsEmojiNeutral } from "react-icons/bs";
 import TimeAgoComponent from "~/components/TimeAgo";
 import { motionItem } from "~/utils/animation";
 import type { RouterOutputs } from "~/utils/api";
@@ -50,21 +46,12 @@ const JobCard = ({ job }: { job: Job }) => {
     >
       <Link
         href={`/job/${job.id}`}
-        className="grid  grid-cols-[auto_1fr] grid-rows-[3,auto] items-center gap-2  gap-x-4"
+        className="grid   items-center gap-2  gap-x-4"
       >
-        <Image
-          width={80}
-          height={80}
-          src={job.company.logo}
-          alt={job.company.name}
-          className=" row-span-2 aspect-square h-full  max-h-10 overflow-hidden object-contain md:row-span-3 md:max-h-16"
-        />
-
         <h2 className="font-medium capitalize line-clamp-2 ">
           {job.title.toLowerCase()}
         </h2>
-
-        <div className=" col-span-1 flex flex-wrap items-center gap-2  md:col-span-1">
+        <ul className="  my-2 flex flex-wrap items-center gap-y-1  gap-x-6  md:my-[revert]">
           <TextItem
             prefix="job type "
             suffix={job.type.replaceAll("_", " ").toLowerCase()}
@@ -81,8 +68,6 @@ const JobCard = ({ job }: { job: Job }) => {
                 : BiHomeAlt
             }
           />
-        </div>
-        <ul className=" col-span-2 my-2 flex flex-wrap items-center gap-y-1  gap-x-6 md:col-span-1 md:my-[revert]">
           <TextItem
             prefix="Salary"
             suffix={job.salary ? `${job.salary} lpa` : "Not Disclosed"}
@@ -104,9 +89,6 @@ const JobCard = ({ job }: { job: Job }) => {
       <div className=" grid grid-cols-2 ">
         <p className=" flex h-full max-h-6 w-fit  items-center rounded-full py-1 px-4 text-xs capitalize  text-gray-500 md:bottom-1 md:right-1">
           <TimeAgoComponent createdAt={job.createdAt} />
-        </p>
-        <p className=" ml-auto flex h-full max-h-6  rounded-full py-1 px-4 text-end text-xs capitalize  text-gray-500 md:bottom-1 md:right-1">
-          by {job.company.name}
         </p>
       </div>
     </motion.li>
