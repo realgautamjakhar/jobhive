@@ -1,6 +1,7 @@
 "use client";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, ReactNode, useState } from "react";
+import { Fragment, , useState } from "react"; 
+import type {ReactNode}  from "react"; 
 import SecondaryButton from "../button/SecondaryButton";
 
 const ConfirmModal = ({

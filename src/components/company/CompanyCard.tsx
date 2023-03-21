@@ -33,7 +33,7 @@ const CompanyCard = ({ company }: { company: Company }) => {
           <h2 className=" text-lg font-medium capitalize line-clamp-1">
             {company.name.toLowerCase()}
           </h2>
-          <div className="  flex w-full gap-4 text-gray-400 md:justify-center">
+          {/* <div className="  flex w-full gap-4 text-gray-400 md:justify-center">
             <a
               title={`${company.name} website link`}
               href={company.website}
@@ -52,7 +52,7 @@ const CompanyCard = ({ company }: { company: Company }) => {
             >
               <AiFillLinkedin size={18} />
             </a>
-          </div>
+          </div> */}
         </div>
       </Link>
     </motion.li>

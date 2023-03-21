@@ -6,9 +6,6 @@ import {
   createTRPCRouter,
   publicProcedure,
 } from "~/server/api/trpc";
-
-import { prisma } from "~/server/db";
-
 export const categoryRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.category.findMany();

@@ -27,10 +27,10 @@ const AdminJobCardControl = ({ jobId, refetch }) => {
   };
 
   return (
-    <div className=" mt-4 ml-auto flex items-center gap-4">
+    <div className=" ml-auto flex items-center gap-4">
       <Link title={`Edit page link for job`} href={`/admin/edit/job/${jobId}`}>
         <BiEdit
-          size={22}
+          size={20}
           className="text-accent-500 transition-all duration-300 ease-in-out hover:scale-110"
         />
       </Link>
@@ -38,7 +38,7 @@ const AdminJobCardControl = ({ jobId, refetch }) => {
         title="Delete"
         loading={deleteJob.isLoading}
         subTitle="You want to delete this job listing from our site ???"
-        button={<AiOutlineDelete size={22} className="text-red-400" />}
+        button={<AiOutlineDelete size={20} className="text-red-400" />}
         onConfirm={handleDelete}
       />
     </div>

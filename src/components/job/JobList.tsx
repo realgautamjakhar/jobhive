@@ -5,26 +5,7 @@ import { api } from "~/utils/api";
 import JobCard from "./JobCard";
 import SecondaryButton from "~/components/button/SecondaryButton";
 import JobCardSkeleton from "~/components/skeleton/JobCardSkeleton";
-
-export const motionContainer = {
-  hidden: { opacity: 1 },
-  visible: {
-    opacity: 1,
-
-    transition: {
-      delayChildren: 0.3,
-      staggerChildren: 0.2,
-    },
-  },
-};
-
-export const motionItem = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-  },
-};
+import { motionContainer, motionItem } from "~/utils/animation";
 
 const JobList = () => {
   const getJobs = api.job.getAllJobsShowMore.useMutation();

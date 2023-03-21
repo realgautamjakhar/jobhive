@@ -35,9 +35,50 @@ export const jobRouter = createTRPCRouter({
         include: {
           company: true,
         },
-        orderBy: {
-          createdAt: "desc",
+        orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
+        take: limit + 1, // fetch one more tweet than needed
+        skip: input.skip || 0,
+      });
+      const hasMore = jobs?.length > limit;
+      if (hasMore) {
+        jobs.pop();
+      }
+      return {
+        jobs,
+        hasMore,
+      };
+    }),
+
+  search: publicProcedure
+    .input(
+      z.object({
+        skip: z.number().default(0),
+        category: z.string().default(""),
+        subCategory: z.string().default(""),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const limit = 10;
+      const jobs = await prisma.job.findMany({
+        where: {
+          approved: {
+            equals: true,
+          },
+          category: {
+            name: {
+              contains: input?.category ? input.category : "",
+            },
+          },
+          subCategory: {
+            name: {
+              contains: input?.subCategory ? input.subCategory : "",
+            },
+          },
         },
+        include: {
+          company: true,
+        },
+        orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
         take: limit + 1, // fetch one more tweet than needed
         skip: input.skip || 0,
       });

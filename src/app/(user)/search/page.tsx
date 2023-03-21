@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import SecondaryButton from "~/components/button/SecondaryButton";
 import JobCard from "~/components/job/JobCard";
@@ -15,26 +16,44 @@ type option = {
 };
 
 const SearchPage = () => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [jobs, setJobs] = useState<any>([]);
-  const [selectedCategory, setSelectedCategory] = useState<option>();
-  const [selectedSubCategory, setSelectedSubCategory] = useState<option>();
-  const [page, setPage] = useState(0);
+
+  const paramCategory = searchParams.get("category");
+  const paramSubCategory = searchParams.get("subCategory");
+  const paramPage = searchParams.get("page");
+  const [selectedCategory, setSelectedCategory] = useState<option>(
+    paramCategory
+      ? {
+          title: paramCategory,
+          id: "",
+        }
+      : undefined
+  );
+  const [selectedSubCategory, setSelectedSubCategory] = useState<option>(
+    paramSubCategory
+      ? {
+          title: paramSubCategory,
+          id: "",
+        }
+      : undefined
+  );
+  const [page, setPage] = useState(paramPage ? parseInt(paramPage) : 1);
   const [hasMore, setHasMore] = useState(false);
 
   const { data: categories } = api.category.getAll.useQuery();
   const { data: subCategories } = api.subCategory.getAll.useQuery();
 
-  const getJobs = api.job.getAllJobs.useMutation();
+  const getJobs = api.job.search.useMutation();
 
   const fetchJobs = async () => {
-    const skip = jobs?.length * page || 0;
+    const skip = jobs?.length * (page - 1) || 0;
     const newData = await getJobs.mutateAsync({
       skip: skip,
       category: selectedCategory ? selectedCategory.title : "",
       subCategory: selectedSubCategory ? selectedSubCategory.title : "",
     });
-    console.log(newData, skip);
-
     setJobs(newData.jobs);
     setHasMore(newData.hasMore);
   };
@@ -51,7 +70,7 @@ const SearchPage = () => {
   const subCategoriesOptions: option[] = useMemo(() => {
     return selectedCategory
       ? subCategories
-          .filter((category) => category.category.id === selectedCategory.id)
+          ?.filter((category) => category.category.id === selectedCategory.id)
           .map((category) => {
             return {
               id: category.id,
@@ -68,20 +87,33 @@ const SearchPage = () => {
   }, [selectedCategory, subCategories]);
 
   useEffect(() => {
+    const searchParams = new URLSearchParams();
+    if (selectedCategory) {
+      searchParams.append("category", selectedCategory.title);
+    }
+    if (selectedSubCategory) {
+      searchParams.append("subCategory", selectedSubCategory.title);
+    }
+    if (page) {
+      searchParams.append("page", page.toString());
+    }
+    router.push(`/search?${searchParams}`);
     fetchJobs();
   }, [selectedCategory, selectedSubCategory, page]);
-  console.log(page);
+
   const skeleton = [...Array(5).keys()].map((i) => {
     return <JobCardSkeleton key={i} />;
   });
+
   return (
     <main className=" mx-auto grid h-full w-full max-w-7xl gap-6 px-4 pb-16 md:grid-cols-[auto_1fr] md:py-10 ">
-      <div className=" grid h-fit max-w-[250px] gap-6">
+      <div className=" sticky top-11 z-50 grid h-fit gap-6 md:max-w-[250px]">
         {categories && (
           <ComboBox
             title="Category"
             options={categoriesOptions}
             onChange={setSelectedCategory}
+            selected={selectedCategory}
           />
         )}
         {subCategories && (
@@ -89,50 +121,49 @@ const SearchPage = () => {
             title="Sub Category"
             options={subCategoriesOptions}
             onChange={setSelectedSubCategory}
+            selected={selectedSubCategory}
           />
         )}
       </div>
-      <div>
+      <div className=" z-10">
         <>
-          {jobs ? (
+          {jobs && !getJobs.isLoading ? (
             <motion.ul
               initial="hidden"
               animate="visible"
               variants={motionContainer}
               className="grid gap-6 "
             >
-              {!getJobs.isLoading ? (
-                <>
-                  {jobs?.map((job) => {
-                    return <JobCard job={job} key={job.id} />;
-                  })}
-                </>
-              ) : (
-                <>{skeleton}</>
-              )}
-
-              <div className=" my-6 flex justify-between">
-                {page > 0 && (
-                  <SecondaryButton
-                    onClick={() => setPage((prev) => prev - 1)}
-                    className=" relative mr-auto  w-fit rounded-full bg-dark-500 py-2 text-white shadow-2xl shadow-dark-500/50"
-                    disable={getJobs.isLoading}
-                  >
-                    Prev
-                  </SecondaryButton>
-                )}
-                {hasMore && (
-                  <SecondaryButton
-                    onClick={() => setPage((prev) => prev + 1)}
-                    className=" relative ml-auto  w-fit rounded-full bg-dark-500 py-2 text-white shadow-2xl shadow-dark-500/50"
-                    disable={getJobs.isLoading}
-                  >
-                    Next
-                  </SecondaryButton>
-                )}
-              </div>
+              {jobs?.map((job) => {
+                return <JobCard job={job} key={job.id} />;
+              })}
             </motion.ul>
-          ) : null}
+          ) : (
+            <>
+              <ul className="grid gap-6 ">{skeleton}</ul>
+            </>
+          )}
+          {!jobs && !getJobs.isLoading && <p>No jobs found</p>}
+          <div className=" my-6 flex justify-between">
+            {page > 1 && (
+              <SecondaryButton
+                onClick={() => setPage((prev) => prev - 1)}
+                className=" relative mr-auto  w-fit rounded-full bg-dark-500 py-2 text-white shadow-2xl shadow-dark-500/50"
+                disable={getJobs.isLoading}
+              >
+                Prev
+              </SecondaryButton>
+            )}
+            {hasMore && (
+              <SecondaryButton
+                onClick={() => setPage((prev) => prev + 1)}
+                className=" relative ml-auto  w-fit rounded-full bg-dark-500 py-2 text-white shadow-2xl shadow-dark-500/50"
+                disable={getJobs.isLoading}
+              >
+                Next
+              </SecondaryButton>
+            )}
+          </div>
         </>
       </div>
     </main>

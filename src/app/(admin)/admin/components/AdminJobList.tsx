@@ -1,5 +1,5 @@
 "use client";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 import { api } from "~/utils/api";
 import JobCard from "./JobCard";
@@ -41,9 +41,11 @@ const JobList = () => {
           variants={motionContainer}
           className="grid gap-6 "
         >
-          {jobs?.map((job) => {
-            return <JobCard refetch={refetchJobs} job={job} key={job.id} />;
-          })}
+          <AnimatePresence>
+            {jobs?.map((job) => {
+              return <JobCard refetch={refetchJobs} job={job} key={job.id} />;
+            })}
+          </AnimatePresence>
         </motion.ul>
       ) : (
         <ul className="grid gap-6 ">{skeleton}</ul>

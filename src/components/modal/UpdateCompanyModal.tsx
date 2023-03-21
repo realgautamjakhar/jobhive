@@ -1,7 +1,8 @@
 "use client";
 import { Field, Form, Formik } from "formik";
 import React, { useState } from "react";
-import { api, RouterOutputs } from "~/utils/api";
+import { api } from "~/utils/api";
+import type { RouterOutputs } from "~/utils/api";
 import PrimaryButton from "../button/PrimaryButton";
 import ImageUpload from "../input/ImageUpload";
 import { TextInput } from "../input/TextInput";

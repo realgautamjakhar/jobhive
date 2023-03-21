@@ -6,18 +6,15 @@ import {
   BiBriefcase,
   BiBuildings,
   BiHomeAlt,
-  BiLocationPlus,
   BiMap,
-  BiPin,
   BiRupee,
   BiTimeFive,
 } from "react-icons/bi";
-import { BsEmojiNeutral } from "react-icons/bs";
 import TimeAgoComponent from "~/components/TimeAgo";
 import { motionItem } from "~/utils/animation";
 import type { RouterOutputs } from "~/utils/api";
 
-type Job = RouterOutputs["job"]["getAll"][0];
+type Job = RouterOutputs["job"]["adminGetAllJobs"][0];
 
 const TextItem = ({
   prefix,
@@ -46,7 +43,9 @@ const JobCard = ({ job }: { job: Job }) => {
       transition={{
         type: "spring",
       }}
-      className=" relative grid items-center gap-2 rounded-2xl bg-white p-4 shadow-2xl shadow-accent-100/50 hover:shadow-accent-100 hover:ring-2 hover:ring-accent-200 "
+      className={`relative z-10 grid items-center gap-2 rounded-2xl bg-white p-4 shadow-2xl shadow-accent-100/50 hover:shadow-accent-100 hover:ring-2 hover:ring-accent-200 ${
+        job.featured ? "ring-2 ring-accent-200" : ""
+      }`}
     >
       <Link
         href={`/job/${job.id}`}

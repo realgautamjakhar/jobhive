@@ -11,7 +11,7 @@ import TimeAgoComponent from "../TimeAgo";
 import SecondaryButton from "../button/SecondaryButton";
 import { toast } from "react-hot-toast";
 
-type Job = RouterOutputs["job"]["getAll"][0];
+type Job = RouterOutputs["job"]["adminGetAllJobs"][0];
 
 const Search = () => {
   const [searchInput, setSearchInput] = useState<string>("");
@@ -37,7 +37,7 @@ const Search = () => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className=" relative mx-auto my-16  flex w-full max-w-2xl items-center justify-center rounded-full bg-white p-2 shadow-2xl shadow-accent-100 "
+      className=" relative mx-auto mt-10 mb-6  flex w-full max-w-2xl items-center justify-center rounded-full bg-white p-2 shadow-2xl shadow-accent-100 "
     >
       <input
         type="text"
