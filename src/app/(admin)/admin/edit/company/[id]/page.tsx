@@ -25,17 +25,29 @@ const DisplayingErrorMessagesSchema = Yup.object().shape({
   linkedin: Yup.string().required("Required"),
 });
 
-const ListCompany = () => {
-  const listCompany = api.company.create.useMutation({
+const EditCompanyPage = ({
+  params,
+}: {
+  params: {
+    id: string;
+  };
+}) => {
+  const { id } = params;
+  const { data: company } = api.company.get.useQuery({
+    id: id,
+  });
+  console.log(company);
+
+  const editCompany = api.company.update.useMutation({
     onSuccess: () => {
-      toast.success("Company Listed SuccessFully");
+      toast.success("Company Updated SuccessFully");
     },
-    onError: () => {
-      toast.error("Something went Wrong");
+    onError: (e) => {
+      toast.error(`Something went Wrong ${e.message}`);
     },
   });
-  const [desc, setDesc] = useState("Company Description");
-  const [logo, setLogo] = useState("");
+  const [desc, setDesc] = useState(company.desc);
+  const [logo, setLogo] = useState(company.logo);
   return (
     <main className=" mx-auto w-full max-w-lg px-4 pb-16">
       <h2 className=" py-4 text-[clamp(1rem,6vw,2rem)] font-medium capitalize">
@@ -43,15 +55,16 @@ const ListCompany = () => {
       </h2>
       <Formik
         initialValues={{
-          name: "",
-          website: "",
-          linkedin: "",
+          name: company.name,
+          website: company.website,
+          linkedin: company.linkedin,
         }}
         validationSchema={DisplayingErrorMessagesSchema}
         onSubmit={(values: Values) => {
           if (!logo) toast.error("Fills all the fields");
           if (logo) {
-            void listCompany.mutate({
+            void editCompany.mutate({
+              id: company.id,
               name: values.name,
               desc: desc,
               logo: logo,
@@ -61,8 +74,8 @@ const ListCompany = () => {
           }
         }}
       >
-        <Form className=" grid gap-4">
-          <ImageUpload onChange={(base64) => setLogo(base64)} />
+        <Form className=" grid gap-2">
+          <ImageUpload value={logo} onChange={(base64) => setLogo(base64)} />
 
           <Field
             component={TextInput}
@@ -71,13 +84,12 @@ const ListCompany = () => {
             title="name"
             placeholder="Apple"
           />
-
-          <RichTextEditor
-            title="Company Description"
-            value={desc}
-            onChange={setDesc}
-          />
-
+          <div>
+            <h2 className="pb-1 pl-2 text-sm capitalize text-gray-900 dark:text-gray-100">
+              Company Description
+            </h2>
+            <RichTextEditor value={desc} onChange={setDesc} />
+          </div>
           <Field
             component={TextInput}
             name="website"
@@ -94,11 +106,11 @@ const ListCompany = () => {
           />
 
           <PrimaryButton
-            disable={listCompany.isLoading}
-            loading={listCompany.isLoading}
+            disable={editCompany.isLoading}
+            loading={editCompany.isLoading}
             className="mt-4"
           >
-            Submit
+            Edit / Update
           </PrimaryButton>
         </Form>
       </Formik>
@@ -106,4 +118,4 @@ const ListCompany = () => {
   );
 };
 
-export default api.withTRPC(ListCompany);
+export default api.withTRPC(EditCompanyPage);

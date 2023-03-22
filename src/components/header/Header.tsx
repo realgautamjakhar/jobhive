@@ -2,6 +2,8 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { BiAddToQueue } from "react-icons/bi";
+import LinkIcon from "../button/LinkIcon";
 import SecondaryButton from "../button/SecondaryButton";
 
 const Header = () => {
@@ -18,10 +20,10 @@ const Header = () => {
             height={50}
           />
         </Link>
-        <ul className=" flex gap-2">
+        <ul className=" flex items-center gap-2">
           {session?.user ? (
             <>
-              {/* <li className="  hidden items-center gap-2 md:flex">
+              <li className="  hidden items-center gap-2 md:flex">
                 <Image
                   src={session?.user?.image || ""}
                   alt="user avatar"
@@ -29,12 +31,21 @@ const Header = () => {
                   height={25}
                   className=" rounded-full"
                 />
-                <p>{session?.user?.name}</p>
-              </li> */}
+                <p className=" hidden text-xs  hover:text-accent-500 md:block">
+                  {session?.user?.name}
+                </p>
+              </li>
               {session?.user.isAdmin && (
                 <li className=" flex items-center gap-2">
                   <Link href="/admin">Admin</Link>
                 </li>
+              )}
+              {!session?.user.isAdmin && (
+                <LinkIcon
+                  title="List Job"
+                  icon={BiAddToQueue}
+                  href="/list/job"
+                />
               )}
               <li>
                 <SecondaryButton

@@ -13,11 +13,11 @@ const LinkIcon = ({
 }) => {
   return (
     <Link
-      className=" flex items-center gap-2 rounded-full bg-dark-500 py-2 px-4 text-center text-white"
+      className=" relative flex w-fit flex-nowrap items-center gap-2 whitespace-nowrap rounded-3xl bg-white py-2.5 px-4  text-center text-sm shadow-xl shadow-accent-100/50 ring-2 ring-accent-400  transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-accent-200/50  hover:ring-2 hover:ring-accent-200"
       title={title}
       href={href}
     >
-      <Icon />
+      <Icon size={18} />
       {title}
     </Link>
   );

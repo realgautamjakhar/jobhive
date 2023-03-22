@@ -1,7 +1,16 @@
 "use client";
 import { motion } from "framer-motion";
 import React, { useState } from "react";
-import { BiSearch, BiX } from "react-icons/bi";
+import {
+  BiBriefcase,
+  BiBuildings,
+  BiHomeAlt,
+  BiMap,
+  BiRupee,
+  BiSearch,
+  BiTimeFive,
+  BiX,
+} from "react-icons/bi";
 import { api } from "~/utils/api";
 import type { RouterOutputs } from "~/utils/api";
 import { motionContainer, motionItem } from "~/utils/animation";
@@ -10,6 +19,7 @@ import Link from "next/link";
 import TimeAgoComponent from "../TimeAgo";
 import SecondaryButton from "../button/SecondaryButton";
 import { toast } from "react-hot-toast";
+import IconText from "../job/IconText";
 
 type Job = RouterOutputs["job"]["adminGetAllJobs"][0];
 
@@ -42,8 +52,8 @@ const Search = () => {
       <input
         type="text"
         value={searchInput}
-        className=" w-full bg-transparent py-2 pl-10 text-xl focus:outline-none"
-        placeholder="Search jobs"
+        className=" h-full w-full  bg-transparent py-2 pl-10 text-xl placeholder:text-sm focus:outline-none"
+        placeholder="Search jobs by title or company name"
         onChange={(e) => setSearchInput(e.target.value)}
       />
       <BiSearch
@@ -64,7 +74,7 @@ const Search = () => {
         loading={searchJob.isLoading}
         disable={searchJob.isLoading}
         onClick={() => handleSearch()}
-        className=" mr-1 h-full w-fit rounded-full  bg-darkGradient py-2  px-4 text-white"
+        className=" mr-1 h-full w-fit rounded-full  bg-darkGradient py-2  px-4 text-sm text-white"
       >
         Search
       </SecondaryButton>
@@ -85,8 +95,8 @@ const SearchDropDown = ({ searchedJobs }: { searchedJobs: Job[] }) => {
       initial="hidden"
       animate="visible"
       variants={motionContainer}
-      className=" absolute left-0 top-20 z-50 grid w-full gap-4 rounded-3xl bg-white p-4
-     shadow-2xl shadow-accent-100"
+      className=" absolute left-0 top-20 z-50 grid max-h-[500px] w-full gap-4 overflow-scroll rounded-3xl
+     bg-white p-4 shadow-2xl shadow-accent-200 "
     >
       {searchedJobs?.map((job: Job) => {
         return (
@@ -96,40 +106,80 @@ const SearchDropDown = ({ searchedJobs }: { searchedJobs: Job[] }) => {
             whileHover={{
               scale: 1.025,
             }}
-            className=" grid items-center gap-2 rounded-3xl bg-light-100 p-4 shadow-2xl shadow-accent-100/50 hover:shadow-accent-100 md:grid-cols-[1fr_auto]"
+            transition={{
+              type: "spring",
+            }}
+            className={`relative z-10 grid items-center gap-2 rounded-2xl bg-white p-4 shadow-2xl shadow-accent-100/50 hover:shadow-accent-100 hover:ring-2 hover:ring-accent-200 ${
+              job.featured ? "ring-2 ring-accent-200" : ""
+            }`}
           >
             <Link
               href={`/job/${job.id}`}
-              className="grid  grid-cols-[auto_1fr] grid-rows-[3,auto] items-center gap-y-2 gap-x-4  "
+              className="grid  grid-cols-[auto_1fr] grid-rows-[3,auto] items-center gap-2  gap-x-4"
             >
               <Image
                 width={80}
                 height={80}
                 src={job.company.logo}
                 alt={job.company.name}
-                className=" h-full max-h-10 overflow-hidden  object-contain md:row-span-3 md:max-h-20"
+                className=" row-span-2 aspect-square h-full  max-h-10 overflow-hidden object-contain md:row-span-3 md:max-h-16"
               />
 
-              <h2 className="font-medium capitalize line-clamp-2">
+              <h2 className="font-medium capitalize line-clamp-2 ">
                 {job.title.toLowerCase()}
               </h2>
 
-              <div className=" col-span-2 my-2 flex flex-wrap gap-2 md:col-span-1">
-                <p className="flex h-full  max-h-6 w-fit items-center rounded-full bg-dark-500 py-1 px-4  text-xs capitalize text-gray-100">
-                  <TimeAgoComponent createdAt={job.createdAt} />
-                </p>
-                <p className="flex  h-full max-h-6 w-fit items-center rounded-full bg-dark-100 py-1 px-4  text-xs capitalize text-gray-800">
-                  {job.type.replaceAll("_", " ").toLowerCase()}
-                </p>
-                <p
-                  className={` hidden h-full max-h-6 w-fit rounded-full bg-dark-100 px-4 py-1 text-xs capitalize text-gray-700 sm:block ${
-                    job.workPlace === "REMOTE" ? " bg-green-300" : ""
-                  }`}
-                >
-                  {job.workPlace.replaceAll("_", " ").toLowerCase()}
-                </p>
+              <div className=" col-span-1 flex flex-wrap items-center gap-2  md:col-span-1">
+                <IconText
+                  prefix="job type "
+                  suffix={job.type.replaceAll("_", " ").toLowerCase()}
+                  icon={BiTimeFive}
+                />
+                <IconText
+                  prefix="Work Place"
+                  suffix={job.workPlace.toLocaleLowerCase()}
+                  icon={
+                    job.workPlace === "OFFICE"
+                      ? BiBuildings
+                      : job.workPlace === "HYBRID"
+                      ? BiBuildings
+                      : BiHomeAlt
+                  }
+                />
               </div>
+              <ul className=" col-span-2 my-2 flex flex-wrap items-center gap-y-1  gap-x-6 md:col-span-1 md:my-[revert]">
+                <IconText
+                  prefix="Salary"
+                  suffix={job.salary ? `${job.salary} lpa` : "Not Disclosed"}
+                  icon={BiRupee}
+                />
+                <IconText
+                  suffix={
+                    job?.experienceMin !== job?.experienceMax
+                      ? ` ${
+                          job?.experienceMin === 0
+                            ? "Fresher"
+                            : job.experienceMin
+                        } - ${job.experienceMax} yrs`
+                      : "Not Disclosed"
+                  }
+                  icon={BiBriefcase}
+                />
+                <IconText
+                  prefix="Location"
+                  suffix={job.location}
+                  icon={BiMap}
+                />
+              </ul>
             </Link>
+            <div className=" grid grid-cols-2 ">
+              <p className=" flex h-full max-h-6 w-fit  items-center rounded-full py-1 px-4 text-xs capitalize  text-gray-500 md:bottom-1 md:right-1">
+                <TimeAgoComponent createdAt={job.createdAt} />
+              </p>
+              <p className=" ml-auto flex h-full max-h-6  rounded-full py-1 px-4 text-end text-xs capitalize  text-gray-500 md:bottom-1 md:right-1">
+                by {job.company.name}
+              </p>
+            </div>
           </motion.li>
         );
       })}

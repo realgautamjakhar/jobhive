@@ -1,29 +1,27 @@
 "use client";
-import { Field, Form, Formik } from "formik";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 import { api } from "~/utils/api";
+import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { TextInput } from "~/components/input/TextInput";
 import PrimaryButton from "~/components/button/PrimaryButton";
 import { JobType, WorkPlace } from "@prisma/client";
 import RichTextEditor from "~/components/input/RichTextEditor";
 import Loader from "~/components/Loader";
-import { toast } from "react-hot-toast";
 import { FiChevronDown } from "react-icons/fi";
-import { useSession } from "next-auth/react";
 
 interface Values {
   title: string;
-  desc: string;
-  type: JobType;
+  type: JobType | undefined;
   education: string;
   role: string;
-  industry: string;
-  department: string;
-  salary: number;
-  experienceMin: number;
-  experienceMax: number;
-  workPlace: WorkPlace;
+  salary: number | undefined;
+  experienceMin: number | undefined;
+  experienceMax: number | undefined;
+  workPlace: WorkPlace | undefined;
   location: string;
   companyId: string;
   categoryId: string;
@@ -37,21 +35,22 @@ const DisplayingErrorMessagesSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
+  education: Yup.string()
+    .required("Required")
+    .min(2, "Too Short!")
+    .max(20, "Too Long!"),
+  role: Yup.string().required("Required"),
+  salary: Yup.number().min(0, "Salary can be negative ???"),
   type: Yup.string().required("Required"),
-  education: Yup.string().required("Required"),
 });
-
-const JobListPage = () => {
+const JobList = () => {
   const { data: session } = useSession();
+  const router = useRouter();
+  if (!session?.user) {
+    toast.error("Please login to perform this action");
+  }
 
-  const listJob = api.job.create.useMutation({
-    onSuccess: () => {
-      toast.success("Job updated Successfully");
-    },
-    onError: (e) => {
-      toast.error(`Something went wrong  ${e.message}`);
-    },
-  });
+  const listJob = api.job.userCreate.useMutation();
 
   const { data: companies, isLoading: isCompaniesLoading } =
     api.company.getAll.useQuery(undefined, {});
@@ -76,16 +75,15 @@ const JobListPage = () => {
       <Formik
         initialValues={{
           title: "",
-          desc: "",
-          type: "",
+          type: undefined,
           education: "",
           role: "",
           industry: "",
           department: "",
-          experienceMin: 0,
-          experienceMax: 0,
-          salary: 0,
-          workPlace: "",
+          experienceMin: undefined,
+          experienceMax: undefined,
+          salary: undefined,
+          workPlace: "REMOTE",
           location: "",
           categoryId: categories?.length > 0 ? categories[0].id : "",
           subCategoryId: subCategories?.length > 0 ? subCategories[0].id : "",
@@ -101,8 +99,6 @@ const JobListPage = () => {
             type: values.type,
             education: values.education,
             role: values.role,
-            industry: values.industry,
-            department: values.department,
             experienceMin: values.experienceMin,
             experienceMax: values.experienceMax,
             salary: values.salary,
@@ -111,8 +107,6 @@ const JobListPage = () => {
             companyId: values.companyId,
             categoryId: values.categoryId,
             subCategoryId: values.subCategoryId,
-            approved: values.approved,
-            featured: values.featured,
             userId: session.user.id,
           });
         }}
@@ -346,30 +340,6 @@ const JobListPage = () => {
                 title="Apply Instruction (if any)"
                 onChange={setApplyInstruction}
               />
-              <div className="  grid grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="featured" className="addon-checkbox mt-5">
-                    <Field type="checkbox" id="featured" name="featured" />
-                    <div className="custom-checkbox" />
-                    <div className="checkbox-content flex">
-                      <p className="text-marineblue  text-sm font-bold capitalize">
-                        featured
-                      </p>
-                    </div>
-                  </label>
-                </div>
-                <div>
-                  <label htmlFor="approved" className="addon-checkbox mt-5">
-                    <Field type="checkbox" id="approved" name="approved" />
-                    <div className="custom-checkbox" />
-                    <div className="checkbox-content flex">
-                      <p className="text-marineblue  text-sm font-bold capitalize">
-                        approved
-                      </p>
-                    </div>
-                  </label>
-                </div>
-              </div>
               <PrimaryButton className=" my-4 w-full" type="submit">
                 List
               </PrimaryButton>
@@ -381,4 +351,4 @@ const JobListPage = () => {
   );
 };
 
-export default api.withTRPC(JobListPage);
+export default JobList;

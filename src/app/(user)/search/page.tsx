@@ -10,7 +10,7 @@ import { motionContainer } from "~/utils/animation";
 import { api } from "~/utils/api";
 
 type option = {
-  id: string;
+  value: string;
   category?: string;
   title: string;
 };
@@ -27,7 +27,7 @@ const SearchPage = () => {
     paramCategory
       ? {
           title: paramCategory,
-          id: "",
+          value: "",
         }
       : undefined
   );
@@ -35,7 +35,7 @@ const SearchPage = () => {
     paramSubCategory
       ? {
           title: paramSubCategory,
-          id: "",
+          value: "",
         }
       : undefined
   );
@@ -62,7 +62,7 @@ const SearchPage = () => {
     return categories?.map((category) => {
       return {
         title: category.name,
-        id: category.id,
+        value: category.id,
       };
     });
   }, [categories]);
@@ -70,17 +70,19 @@ const SearchPage = () => {
   const subCategoriesOptions: option[] = useMemo(() => {
     return selectedCategory
       ? subCategories
-          ?.filter((category) => category.category.id === selectedCategory.id)
+          ?.filter(
+            (category) => category.category.id === selectedCategory.value
+          )
           .map((category) => {
             return {
-              id: category.id,
+              value: category.id,
               title: category.name,
               category: category.category.id,
             };
           })
       : subCategories?.map((category) => {
           return {
-            id: category.id,
+            value: category.id,
             title: category.name,
           };
         });

@@ -52,6 +52,7 @@ model User {
     isAdmin       Boolean   @default(false)
     accounts      Account[]
     sessions      Session[]
+    Job           Job[]
 }
 
 model VerificationToken {
@@ -71,10 +72,8 @@ model Job {
     workPlace WorkPlace @default(OFFICE) // office remote hybrid
     location  String?   @default("home")
 
-    education  String
-    role       String? //Job roles like full stack etc
-    industry   String // Industry means like CS SDE WD
-    department String // CS / MS / CE
+    education String
+    role      String? //Job roles like full stack etc
 
     salary        Int? // In lpa
     experienceMin Int?
@@ -86,11 +85,15 @@ model Job {
 
     featured Boolean @default(false)
     approved Boolean @default(false)
+    rejected Boolean @default(false)
 
-    company       Company?     @relation(fields: [companyId], references: [id])
-    companyId     String       @db.ObjectId
-    subCategory   Subcategory? @relation(fields: [subCategoryId], references: [id])
-    subCategoryId String       @db.ObjectId
+    userId String? @db.ObjectId
+    user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    company       Company     @relation(fields: [companyId], references: [id])
+    companyId     String      @db.ObjectId
+    subCategory   Subcategory @relation(fields: [subCategoryId], references: [id])
+    subCategoryId String      @db.ObjectId
 
     category   Category @relation(fields: [categoryId], references: [id])
     categoryId String   @db.ObjectId

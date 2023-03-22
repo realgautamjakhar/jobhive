@@ -76,13 +76,14 @@ const CategoryPage = () => {
             id="name"
             placeholder="Category Name"
           />
-          <PrimaryButton
+          <SecondaryButton
             loading={createCategory.isLoading}
             disable={createCategory.isLoading}
             type="submit"
+            className=" rounded-full  bg-white py-2  ring-1 ring-accent-100 duration-300 ease-in-out hover:ring-accent-500"
           >
             Create
-          </PrimaryButton>
+          </SecondaryButton>
         </form>
         <motion.ul
           initial="hidden"
@@ -172,6 +173,7 @@ const CategoryPage = () => {
             loading={createSubCategory.isLoading}
             disable={createSubCategory.isLoading}
             type="submit"
+            className=" rounded-full  bg-white py-2  ring-1 ring-accent-100 duration-300 ease-in-out hover:ring-accent-500"
           >
             Create
           </SecondaryButton>

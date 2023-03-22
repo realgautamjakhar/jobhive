@@ -11,7 +11,11 @@ import { prisma } from "~/server/db";
 
 export const companyRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.company.findMany();
+    return ctx.prisma.company.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    });
   }),
   infiniteCompanies: publicProcedure
     .input(

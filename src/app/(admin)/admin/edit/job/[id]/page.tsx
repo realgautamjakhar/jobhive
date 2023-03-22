@@ -9,6 +9,7 @@ import { JobType, WorkPlace } from "@prisma/client";
 import RichTextEditor from "~/components/input/RichTextEditor";
 import Loader from "~/components/Loader";
 import { toast } from "react-hot-toast";
+import { useSession } from "next-auth/react";
 type Params = {
   params: {
     id: string;
@@ -20,8 +21,6 @@ interface Values {
   type: JobType;
   education: string;
   role: string;
-  industry: string;
-  department: string;
   salary: number;
   experienceMin: number;
   experienceMax: number;
@@ -43,6 +42,7 @@ const DisplayingErrorMessagesSchema = Yup.object().shape({
   education: Yup.string().required("Required"),
 });
 const EditJobPage = ({ params: { id } }: Params) => {
+  const { data: session } = useSession();
   const { data: job, isLoading } = api.job.get.useQuery({ id });
   const editJob = api.job.editJob.useMutation({
     onSuccess: () => {
@@ -89,8 +89,6 @@ const EditJobPage = ({ params: { id } }: Params) => {
           type: job.type,
           education: job.education,
           role: job.role,
-          industry: job.industry,
-          department: job.department,
           experienceMin: job.experienceMin,
           experienceMax: job.experienceMax,
           salary: job.salary,
@@ -111,8 +109,6 @@ const EditJobPage = ({ params: { id } }: Params) => {
             type: values.type,
             education: values.education,
             role: values.role,
-            industry: values.industry,
-            department: values.department,
             experienceMin: values.experienceMin,
             experienceMax: values.experienceMax,
             salary: values.salary,
@@ -123,6 +119,7 @@ const EditJobPage = ({ params: { id } }: Params) => {
             subCategoryId: values.subCategoryId,
             approved: values.approved,
             featured: values.featured,
+            userId: job.userId ? job.userId : session.user.id,
           });
         }}
       >

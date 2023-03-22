@@ -5,7 +5,7 @@ import { HiChevronUpDown } from "react-icons/hi2";
 import { RiCheckLine } from "react-icons/ri";
 
 type option = {
-  id: string;
+  value: string;
   category?: string;
   title: string;
 };
@@ -71,7 +71,7 @@ export default function ComboBox({
             ) : (
               filteredOptions.map((option) => (
                 <Combobox.Option
-                  key={option.id}
+                  key={option.value}
                   className={({ active }) =>
                     `relative cursor-default select-none py-2  pl-10 pr-4 ${
                       active ? "bg-accent-500 text-white" : "text-gray-900"
