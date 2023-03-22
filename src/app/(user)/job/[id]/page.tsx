@@ -22,7 +22,7 @@ export async function generateMetadata({
     title: job.title,
     applicationName: "Job hive",
     icons: {
-      icon: "/assets/logo/brandLogo.svg",
+      icon: "/assets/logo/hexagon.svg",
     },
     robots: {
       index: false,

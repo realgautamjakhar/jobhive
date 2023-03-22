@@ -8,7 +8,7 @@ export const metadata = {
   title: "JobHive",
   description: "A place where you find your dream job",
   icons: {
-    icon: "/assets/logo/brandLogo.svg",
+    icon: "/assets/logo/hexagon.svg",
   },
 };
 

@@ -11,14 +11,31 @@ const Header = () => {
   return (
     <header className=" py-4">
       <nav className=" mx-auto flex max-w-7xl items-center justify-between px-4">
-        <Link href="/">
+        <Link
+          href="/"
+          className=" group flex items-center gap-2 rounded-full  text-gray-500 transition-all duration-300 ease-in-out hover:text-accent-400"
+        >
           <Image
             loading="lazy"
             src="/assets/logo/brandLogo.svg"
             alt="brand logo"
-            width={50}
+            width={40}
             height={50}
+            className="aspect-square object-contain"
           />
+          <div className=" relative flex">
+            <h2 className=" relative text-xl font-medium  tracking-wide">
+              JOB HiVE
+            </h2>
+            <Image
+              loading="lazy"
+              src="/assets/logo/hexagon.svg"
+              alt="brand logo"
+              width={15}
+              height={15}
+              className="absolute -top-2 -right-4 aspect-square object-contain duration-300 ease-in-out group-hover:rotate-180"
+            />
+          </div>
         </Link>
         <ul className=" flex items-center gap-2">
           {session?.user ? (

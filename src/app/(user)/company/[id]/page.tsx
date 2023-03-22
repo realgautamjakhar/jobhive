@@ -26,6 +26,9 @@ export async function generateMetadata({
     };
   return {
     title: company.name,
+    icons: {
+      icon: "/assets/logo/hexagon.svg",
+    },
     description: company.desc.replaceAll(/(<([^>]+)>)/gi, "").split(". ")[0],
   };
 }
