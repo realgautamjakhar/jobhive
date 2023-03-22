@@ -1,5 +1,4 @@
 "use client";
-
 import { Field, Form, Formik } from "formik";
 import React, { useState } from "react";
 import { api } from "~/utils/api";
@@ -9,6 +8,7 @@ import PrimaryButton from "~/components/button/PrimaryButton";
 import { TextInput } from "~/components/input/TextInput";
 import ImageUpload from "~/components/input/ImageUpload";
 import RichTextEditor from "~/components/input/RichTextEditor";
+import { useSession } from "next-auth/react";
 
 interface Values {
   name: string;
@@ -32,13 +32,18 @@ const EditCompanyPage = ({
     id: string;
   };
 }) => {
+  const { data: session } = useSession();
   const { id } = params;
-  const { data: company } = api.company.get.useQuery({
-    id: id,
-  });
-  console.log(company);
+  const { data: company } = api.company.get.useQuery(
+    {
+      id: id,
+    },
+    {
+      enabled: session?.user.isAdmin,
+    }
+  );
 
-  const editCompany = api.company.update.useMutation({
+  const updateAdminCompany = api.company.updateAdminCompany.useMutation({
     onSuccess: () => {
       toast.success("Company Updated SuccessFully");
     },
@@ -63,7 +68,7 @@ const EditCompanyPage = ({
         onSubmit={(values: Values) => {
           if (!logo) toast.error("Fills all the fields");
           if (logo) {
-            void editCompany.mutate({
+            void updateAdminCompany.mutate({
               id: company.id,
               name: values.name,
               desc: desc,
@@ -76,7 +81,6 @@ const EditCompanyPage = ({
       >
         <Form className=" grid gap-2">
           <ImageUpload value={logo} onChange={(base64) => setLogo(base64)} />
-
           <Field
             component={TextInput}
             name="name"
@@ -84,12 +88,13 @@ const EditCompanyPage = ({
             title="name"
             placeholder="Apple"
           />
-          <div>
-            <h2 className="pb-1 pl-2 text-sm capitalize text-gray-900 dark:text-gray-100">
-              Company Description
-            </h2>
-            <RichTextEditor value={desc} onChange={setDesc} />
-          </div>
+
+          <RichTextEditor
+            title="Company Description"
+            value={desc}
+            onChange={setDesc}
+          />
+
           <Field
             component={TextInput}
             name="website"
@@ -106,8 +111,8 @@ const EditCompanyPage = ({
           />
 
           <PrimaryButton
-            disable={editCompany.isLoading}
-            loading={editCompany.isLoading}
+            disable={updateAdminCompany.isLoading}
+            loading={updateAdminCompany.isLoading}
             className="mt-4"
           >
             Edit / Update

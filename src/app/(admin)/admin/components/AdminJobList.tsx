@@ -4,25 +4,7 @@ import React from "react";
 import { api } from "~/utils/api";
 import JobCard from "./JobCard";
 import JobCardSkeleton from "../../../../components/skeleton/JobCardSkeleton";
-export const motionContainer = {
-  hidden: { opacity: 1 },
-  visible: {
-    opacity: 1,
-
-    transition: {
-      delayChildren: 0.3,
-      staggerChildren: 0.2,
-    },
-  },
-};
-
-export const motionItem = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-  },
-};
+import { motionContainer } from "~/utils/animation";
 
 const JobList = () => {
   const { data: jobs, refetch: refetchJobs } =

@@ -18,8 +18,6 @@ interface Values {
   type: JobType;
   education: string;
   role: string;
-  industry: string;
-  department: string;
   salary: number;
   experienceMin: number;
   experienceMax: number;
@@ -37,8 +35,13 @@ const DisplayingErrorMessagesSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
+  education: Yup.string()
+    .required("Required")
+    .min(2, "Too Short!")
+    .max(20, "Too Long!"),
+  role: Yup.string().required("Required"),
+  salary: Yup.number().min(0, "Salary can be negative ???"),
   type: Yup.string().required("Required"),
-  education: Yup.string().required("Required"),
 });
 
 const JobListPage = () => {
@@ -46,7 +49,7 @@ const JobListPage = () => {
 
   const listJob = api.job.create.useMutation({
     onSuccess: () => {
-      toast.success("Job updated Successfully");
+      toast.success("Job Listed Successfully");
     },
     onError: (e) => {
       toast.error(`Something went wrong  ${e.message}`);
@@ -60,14 +63,14 @@ const JobListPage = () => {
   const { data: subCategories, isLoading: isSubCategoriesLoading } =
     api.subCategory.getAll.useQuery(undefined, {});
   const [desc, setDesc] = useState<string>(
-    "Job Listing Description Such as Skills role responsiblity"
+    "Job Listing Description Such as Skills role responsibility"
   );
   const [applyInstruction, setApplyInstruction] = useState<string>(
-    "Job Listing Description Such as Skills role responsiblity"
+    "Any special apply instruction "
   );
-  if (isCompaniesLoading || isCategoriesLoading || isSubCategoriesLoading) {
-    return <Loader />;
-  }
+  // if (isCompaniesLoading || isCategoriesLoading || isSubCategoriesLoading) {
+  //   return <Loader />;
+  // }
   return (
     <main className=" mx-auto w-full max-w-7xl px-4">
       <h2 className=" py-4 text-[clamp(1rem,6vw,2rem)] font-medium capitalize">
@@ -77,15 +80,13 @@ const JobListPage = () => {
         initialValues={{
           title: "",
           desc: "",
-          type: "",
+          type: "REMOTE",
           education: "",
           role: "",
-          industry: "",
-          department: "",
           experienceMin: 0,
           experienceMax: 0,
           salary: 0,
-          workPlace: "",
+          workPlace: "REMOTE",
           location: "",
           categoryId: categories?.length > 0 ? categories[0].id : "",
           subCategoryId: subCategories?.length > 0 ? subCategories[0].id : "",
@@ -95,14 +96,13 @@ const JobListPage = () => {
         }}
         validationSchema={DisplayingErrorMessagesSchema}
         onSubmit={(values: Values) => {
+          // if(!desc) return toast.error("Please provide job description")
           void listJob.mutate({
             title: values.title,
             desc: desc,
             type: values.type,
             education: values.education,
             role: values.role,
-            industry: values.industry,
-            department: values.department,
             experienceMin: values.experienceMin,
             experienceMax: values.experienceMax,
             salary: values.salary,
@@ -117,7 +117,7 @@ const JobListPage = () => {
           });
         }}
       >
-        {({ errors, touched, values }) => (
+        {({ values }) => (
           <Form className="grid gap-6 md:grid-cols-2">
             <div className=" grid h-fit gap-4">
               <Field
@@ -233,7 +233,6 @@ const JobListPage = () => {
             </div>
 
             <div className=" grid items-start gap-4">
-              {" "}
               <div className="grid grid-cols-2 gap-4">
                 <div className=" relative">
                   <h2 className=" pb-1  text-xs capitalize text-gray-600 dark:text-gray-100">
@@ -258,7 +257,7 @@ const JobListPage = () => {
                   </Field>
                   <FiChevronDown
                     size={24}
-                    className="  absolute inset-y-0 -bottom-6  right-2 z-50 my-auto  text-accent-500 transition-all duration-300 ease-in-out group-hover:text-accent-500"
+                    className="  absolute inset-y-0 -bottom-4  right-2 z-50 my-auto  text-accent-500 transition-all duration-300 ease-in-out group-hover:text-accent-500"
                   />
                 </div>{" "}
                 <Field
@@ -348,22 +347,28 @@ const JobListPage = () => {
               />
               <div className="  grid grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="featured" className="addon-checkbox mt-5">
+                  <label
+                    htmlFor="featured"
+                    className="addon-checkbox mt-5 bg-white"
+                  >
                     <Field type="checkbox" id="featured" name="featured" />
                     <div className="custom-checkbox" />
                     <div className="checkbox-content flex">
-                      <p className="text-marineblue  text-sm font-bold capitalize">
+                      <p className="text-sm  font-bold capitalize text-accent-500">
                         featured
                       </p>
                     </div>
                   </label>
                 </div>
                 <div>
-                  <label htmlFor="approved" className="addon-checkbox mt-5">
+                  <label
+                    htmlFor="approved"
+                    className="addon-checkbox mt-5 bg-white"
+                  >
                     <Field type="checkbox" id="approved" name="approved" />
                     <div className="custom-checkbox" />
                     <div className="checkbox-content flex">
-                      <p className="text-marineblue  text-sm font-bold capitalize">
+                      <p className="text-sm  font-bold capitalize text-green-400">
                         approved
                       </p>
                     </div>

@@ -44,7 +44,7 @@ const DisplayingErrorMessagesSchema = Yup.object().shape({
 const EditJobPage = ({ params: { id } }: Params) => {
   const { data: session } = useSession();
   const { data: job, isLoading } = api.job.get.useQuery({ id });
-  const editJob = api.job.editJob.useMutation({
+  const updateAdminJob = api.job.updateAdminJob.useMutation({
     onSuccess: () => {
       toast.success("Job updated Successfully");
     },
@@ -52,6 +52,7 @@ const EditJobPage = ({ params: { id } }: Params) => {
       toast.error("Something went wrong");
     },
   });
+
   const { data: companies, isLoading: isCompaniesLoading } =
     api.company.getAll.useQuery(undefined, {});
   const { data: categories, isLoading: isCategoriesLoading } =
@@ -102,7 +103,7 @@ const EditJobPage = ({ params: { id } }: Params) => {
         }}
         validationSchema={DisplayingErrorMessagesSchema}
         onSubmit={(values: Values) => {
-          void editJob.mutate({
+          void updateAdminJob.mutate({
             id: job.id,
             title: values.title,
             desc: desc,

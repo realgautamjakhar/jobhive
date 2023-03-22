@@ -26,11 +26,6 @@ export const companyRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       const limit = 8;
       const companies = await prisma.company.findMany({
-        orderBy: {
-          jobs: {
-            _count: "desc",
-          },
-        },
         skip: input.skip,
         take: limit + 1,
       });
@@ -43,6 +38,7 @@ export const companyRouter = createTRPCRouter({
         hasMore,
       };
     }),
+  //Single company
   get: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(({ input }) => {
@@ -98,7 +94,7 @@ export const companyRouter = createTRPCRouter({
         },
       });
     }),
-  update: adminProcedure
+  updateAdminCompany: adminProcedure
     .input(
       z.object({
         id: z.string(),

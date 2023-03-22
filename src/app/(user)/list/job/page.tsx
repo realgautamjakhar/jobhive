@@ -75,11 +75,9 @@ const JobList = () => {
       <Formik
         initialValues={{
           title: "",
-          type: undefined,
+          type: "FULL_TIME",
           education: "",
           role: "",
-          industry: "",
-          department: "",
           experienceMin: undefined,
           experienceMax: undefined,
           salary: undefined,

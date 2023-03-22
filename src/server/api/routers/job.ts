@@ -225,7 +225,7 @@ export const jobRouter = createTRPCRouter({
       });
     }),
 
-  editJob: adminProcedure
+  updateAdminJob: adminProcedure
     .input(
       z.object({
         id: z.string(),
