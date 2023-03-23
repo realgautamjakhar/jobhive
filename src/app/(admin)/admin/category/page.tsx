@@ -11,12 +11,13 @@ import { motionContainer, motionItem } from "~/utils/animation";
 import { api } from "~/utils/api";
 
 const CategoryPage = () => {
+  const ctx = api.useContext();
   const { data: categories, refetch: refetchCategory } =
     api.category.getAll.useQuery();
   const createCategory = api.category.create.useMutation({
     onSuccess: () => {
       toast.success("Category Created SuccessFully");
-      refetchCategory();
+      void ctx.category.getAll.invalidate();
     },
     onError: (e) => {
       toast.error(e.message);
@@ -25,19 +26,18 @@ const CategoryPage = () => {
   const deleteCategory = api.category.delete.useMutation({
     onSuccess: () => {
       toast.success("Category Deleted SuccessFully");
-      refetchCategory();
+      void ctx.category.getAll.invalidate();
     },
     onError: (e) => {
       toast.error(e.message);
     },
   });
 
-  const { data: subCategories, refetch: refetchSubCategory } =
-    api.subCategory.getAll.useQuery();
+  const { data: subCategories } = api.subCategory.getAll.useQuery();
   const createSubCategory = api.subCategory.create.useMutation({
     onSuccess: () => {
       toast.success("Sub Category Created SuccessFully");
-      refetchSubCategory();
+      void ctx.subCategory.getAll.invalidate();
     },
     onError: (e) => {
       toast.error(e.message);
@@ -46,7 +46,7 @@ const CategoryPage = () => {
   const deleteSubCategory = api.subCategory.delete.useMutation({
     onSuccess: () => {
       toast.success("Sub Category Deleted SuccessFully");
-      refetchSubCategory();
+      void ctx.subCategory.getAll.invalidate();
     },
     onError: (e) => {
       toast.error(e.message);

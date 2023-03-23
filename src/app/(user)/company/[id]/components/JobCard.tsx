@@ -47,6 +47,7 @@ const JobCard = ({ job }: { job: Job }) => {
       <Link
         href={`/job/${job.id}`}
         className="grid   items-center gap-2  gap-x-4"
+        target={"_blank"}
       >
         <h2 className="font-medium capitalize line-clamp-2 ">
           {job.title.toLowerCase()}

@@ -9,6 +9,7 @@ const LinkItem = ({ href, title }: { href: string; title: string }) => {
     <Link
       href={href}
       className=" relative flex w-fit flex-nowrap items-center gap-2 whitespace-nowrap rounded-3xl bg-white  py-2.5 px-4 text-center text-sm shadow-xl shadow-accent-100/50  transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-accent-200/50  hover:ring-2 hover:ring-accent-200"
+      target={"_blank"}
     >
       {title}
     </Link>

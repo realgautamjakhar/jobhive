@@ -21,6 +21,7 @@ const CompanyCard = ({ company }: { company: Company }) => {
         href={`/company/${company.id}`}
         title={`${company.name} more info and jobs`}
         className="grid w-full grid-cols-[auto_1fr_auto]  gap-2 gap-x-4   md:grid-cols-1 md:text-center"
+        target={"_blank"}
       >
         <Image
           width={75}

@@ -71,6 +71,7 @@ const SideBar = ({ job }: { job: Job }) => {
         <Link
           href={`/company/${job.company.id}`}
           className=" flex items-center gap-2 py-4 text-sm underline"
+          target={"_blank"}
         >
           More info and Listing
           <BiLinkExternal />
