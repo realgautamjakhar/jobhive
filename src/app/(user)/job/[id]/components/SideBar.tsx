@@ -5,6 +5,7 @@ import Link from "next/link";
 import React from "react";
 import type { IconType } from "react-icons";
 import {
+  BiBook,
   BiBriefcase,
   BiBuildings,
   BiHomeAlt,
@@ -14,7 +15,6 @@ import {
   BiRupee,
 } from "react-icons/bi";
 import { BsEmojiNeutral } from "react-icons/bs";
-import PrimaryButton from "~/components/button/PrimaryButton";
 import { motionContainer, motionItem } from "~/utils/animation";
 import type { RouterOutputs } from "~/utils/api";
 
@@ -35,7 +35,7 @@ const InfoCard = ({
       transition={{
         type: "spring",
       }}
-      className="flex items-center justify-between rounded-full bg-accent-600 p-4 px-6  capitalize shadow-2xl shadow-accent-600"
+      className="flex items-center justify-between rounded-full bg-dark-700/25 p-4 px-6 capitalize  backdrop-blur-md"
     >
       <div className=" flex items-center gap-2 text-sm">
         <Icon size={18} />
@@ -57,7 +57,7 @@ const SideBar = ({ job }: { job: Job }) => {
         opacity: 1,
         y: 0,
       }}
-      className=" grid h-fit grid-rows-[200px_1fr] rounded-2xl bg-accentGradientV2 text-white shadow-2xl shadow-accent-500/50"
+      className=" grid h-fit grid-rows-[200px_1fr] rounded-2xl bg-accentGradientV2 text-white shadow-2xl shadow-accent-500/25"
     >
       <div className=" grid grid-rows-[1fr_auto] justify-center rounded-b-3xl bg-light-100/30">
         <Image
@@ -81,7 +81,7 @@ const SideBar = ({ job }: { job: Job }) => {
         variants={motionContainer}
         initial="hidden"
         animate="visible"
-        className=" flex flex-col gap-4 p-4"
+        className=" flex flex-col gap-4 p-4 py-6"
       >
         <InfoCard
           prefix="Company"
@@ -118,10 +118,26 @@ const SideBar = ({ job }: { job: Job }) => {
             icon={BiMapPin}
           />
         )}
-        <motion.a variants={motionContainer} href={job?.applyUrl}>
-          <PrimaryButton className="w-full">
-            Apply Here <BiLink size={18} />
-          </PrimaryButton>
+        {job.education && (
+          <InfoCard
+            prefix="Education"
+            suffix={job.education.toLowerCase()}
+            icon={BiBook}
+          />
+        )}
+        <motion.a
+          target={"_blank"}
+          variants={motionItem}
+          href={job?.applyUrl}
+          whileHover={{
+            scale: 1.025,
+          }}
+          whileTap={{
+            scale: 1,
+          }}
+          className="flex cursor-pointer items-center justify-center gap-2 rounded-full bg-dark-500 py-3"
+        >
+          Apply Here <BiLink size={18} />
         </motion.a>
       </motion.ul>
     </motion.div>

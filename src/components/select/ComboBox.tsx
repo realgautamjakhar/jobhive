@@ -44,10 +44,10 @@ export default function ComboBox({
         <p className=" pb-1  text-xs capitalize text-gray-600 dark:text-gray-100">
           {title}
         </p>
-        <div className="relative w-full cursor-default overflow-hidden rounded-md text-left shadow-2xl shadow-accent-100 ring-1  ring-accent-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+        <div className="relative w-full cursor-default overflow-hidden rounded-md text-left shadow-2xl shadow-accent-100 ring-1  ring-accent-100 hover:ring-accent-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-black sm:text-sm">
           <Combobox.Input
             placeholder="Select any options"
-            className="w-full border-none bg-white  py-2 pl-4 pr-10  capitalize text-gray-900 focus:outline-none focus:ring-0"
+            className="w-full border-none bg-white  py-2 pl-4 pr-10  capitalize text-gray-900 ring-2 focus:outline-none "
             displayValue={(option: option) => option?.title}
             onChange={(event) => setQuery(event.target.value)}
           />

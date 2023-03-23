@@ -56,12 +56,12 @@ const JobListPage = () => {
     },
   });
 
-  const { data: companies, isLoading: isCompaniesLoading } =
-    api.company.getAll.useQuery(undefined, {});
-  const { data: categories, isLoading: isCategoriesLoading } =
-    api.category.getAll.useQuery(undefined, {});
-  const { data: subCategories, isLoading: isSubCategoriesLoading } =
-    api.subCategory.getAll.useQuery(undefined, {});
+  const { data: companies } = api.company.getAll.useQuery(undefined, {});
+  const { data: categories } = api.category.getAll.useQuery(undefined, {});
+  const { data: subCategories } = api.subCategory.getAll.useQuery(
+    undefined,
+    {}
+  );
   const [desc, setDesc] = useState<string>(
     "Job Listing Description Such as Skills role responsibility"
   );

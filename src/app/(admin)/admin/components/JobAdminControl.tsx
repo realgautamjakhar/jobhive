@@ -1,41 +1,23 @@
 "use client";
 import { useSession } from "next-auth/react";
-import React from "react";
-import { toast } from "react-hot-toast";
-import { AiOutlineDelete } from "react-icons/ai";
+import Link from "next/link";
 import { BiEdit } from "react-icons/bi";
-import PrimaryButton from "~/components/button/PrimaryButton";
-import { api } from "~/utils/api";
 
 const JobAdminControl = ({ jobId }) => {
   const { data: session } = useSession();
-  const { data: job, isLoading: isJobLoading } = api.job.get.useQuery(
-    { id: jobId },
-    {
-      enabled: session?.user.isAdmin,
-    }
-  );
   if (!session?.user.isAdmin) {
     return null;
   }
   return (
     <div className=" absolute inset-y-0 right-4 my-auto flex  h-fit flex-col gap-2">
-      {/* <PrimaryButton
-        disable={deleteJob.isLoading}
-        loading={deleteJob.isLoading}
-        onClick={() => {
-          void deleteJob.mutateAsync({
-            id: jobId,
-          });
-        }}
+      <Link
+        target={"_blank"}
+        className="rounded-full bg-accent-500 p-3  text-gray-50  transition-all duration-300 ease-in-out hover:scale-105"
+        title="Edit this job (Admin Edit)"
+        href={`/admin/edit/job/${jobId}`}
       >
-        <AiOutlineDelete size={24} />
-      </PrimaryButton> */}
-      <a href={`/admin/edit/job/${jobId}`}>
-        <PrimaryButton>
-          <BiEdit size={24} />
-        </PrimaryButton>
-      </a>
+        <BiEdit size={20} />
+      </Link>
     </div>
   );
 };

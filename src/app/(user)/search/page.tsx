@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import SecondaryButton from "~/components/button/SecondaryButton";
+import SearchInput from "~/components/input/SearchInput";
 import JobCard from "~/components/job/JobCard";
 import ComboBox from "~/components/select/ComboBox";
 import JobCardSkeleton from "~/components/skeleton/JobCardSkeleton";
@@ -23,6 +24,8 @@ const SearchPage = () => {
   const paramCategory = searchParams.get("category");
   const paramSubCategory = searchParams.get("subCategory");
   const paramPage = searchParams.get("page");
+  const paramSearch = searchParams.get("search");
+
   const [selectedCategory, setSelectedCategory] = useState<option>(
     paramCategory
       ? {
@@ -40,6 +43,7 @@ const SearchPage = () => {
       : undefined
   );
   const [page, setPage] = useState(paramPage ? parseInt(paramPage) : 1);
+  const [search, setSearch] = useState(paramSearch ?? "");
   const [hasMore, setHasMore] = useState(false);
 
   const { data: categories } = api.category.getAll.useQuery();
@@ -53,6 +57,7 @@ const SearchPage = () => {
       skip: skip,
       category: selectedCategory ? selectedCategory.title : "",
       subCategory: selectedSubCategory ? selectedSubCategory.title : "",
+      searchTerm: search,
     });
     setJobs(newData.jobs);
     setHasMore(newData.hasMore);
@@ -99,9 +104,12 @@ const SearchPage = () => {
     if (page) {
       searchParams.append("page", page.toString());
     }
+    if (search) {
+      searchParams.append("search", search);
+    }
     router.push(`/search?${searchParams}`);
     fetchJobs();
-  }, [selectedCategory, selectedSubCategory, page]);
+  }, [selectedCategory, selectedSubCategory, page, search]);
 
   const skeleton = [...Array(5).keys()].map((i) => {
     return <JobCardSkeleton key={i} />;
@@ -110,6 +118,7 @@ const SearchPage = () => {
   return (
     <main className=" mx-auto grid h-full w-full max-w-7xl gap-6 px-4 pb-16 md:grid-cols-[auto_1fr] md:py-10 ">
       <div className=" top-11 z-50 grid h-fit gap-6 bg-light-500 md:sticky  md:max-w-[250px]">
+        <SearchInput value={search} onChange={setSearch} />
         {categories && (
           <ComboBox
             title="Category"
@@ -145,7 +154,11 @@ const SearchPage = () => {
               <ul className="grid gap-6 ">{skeleton}</ul>
             </>
           )}
-          {!jobs && !getJobs.isLoading && <p>No jobs found</p>}
+          {jobs.length === 0 && !getJobs.isLoading && (
+            <div className="flex h-full items-center justify-center text-center">
+              No jobs found
+            </div>
+          )}
           <div className=" my-6 flex justify-between">
             {page > 1 && (
               <SecondaryButton

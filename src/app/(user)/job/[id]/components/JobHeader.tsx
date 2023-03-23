@@ -6,9 +6,10 @@ import {
   BiBuildings,
   BiCodeBlock,
   BiDirections,
-  BiLayout,
   BiRupee,
+  BiUser,
 } from "react-icons/bi";
+
 import { BsPinMap } from "react-icons/bs";
 import TimeAgoComponent from "~/components/TimeAgo";
 import type { RouterOutputs } from "~/utils/api";
@@ -26,7 +27,7 @@ const TextItem = ({
 }) => {
   return (
     <li className="  flex  items-center gap-2 text-sm capitalize">
-      <Icon size={22} className="text-accent-500" />{" "}
+      <Icon size={20} className="text-accent-500" />{" "}
       <span className="text-gray-500">{prefix}</span> :{" "}
       <span className="text-gray-800">{suffix}</span>
     </li>
@@ -86,10 +87,11 @@ const JobHeader = ({ job }: { job: Job }) => {
           icon={BiDirections}
         />
         <TextItem
-          prefix="Role"
+          prefix="Position"
           suffix={job?.subCategory.name}
           icon={BiCodeBlock}
         />
+        <TextItem prefix="Role" suffix={job?.role} icon={BiUser} />
       </ul>
     </div>
   );

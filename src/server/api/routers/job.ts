@@ -70,11 +70,12 @@ export const jobRouter = createTRPCRouter({
       z.object({
         skip: z.number().default(0),
         category: z.string().default(""),
+        searchTerm: z.string().default(""),
         subCategory: z.string().default(""),
       })
     )
     .mutation(async ({ input }) => {
-      const limit = 10;
+      const limit = 5;
       const jobs = await prisma.job.findMany({
         where: {
           approved: {
@@ -90,6 +91,19 @@ export const jobRouter = createTRPCRouter({
               contains: input?.subCategory ? input.subCategory : "",
             },
           },
+          OR: [
+            {
+              title: {
+                contains: input.searchTerm,
+                mode: "insensitive",
+              },
+            },
+            {
+              company: {
+                name: { contains: input.searchTerm, mode: "insensitive" },
+              },
+            },
+          ],
         },
         include: {
           company: true,
@@ -150,8 +164,6 @@ export const jobRouter = createTRPCRouter({
         type: z.enum(["FULL_TIME", "PART_TIME", "CONTRACT", "TEMPORARY"]),
         education: z.string(),
         role: z.string(),
-        industry: z.string(),
-        department: z.string(),
         experienceMin: z.number(),
         experienceMax: z.number(),
         salary: z.number(),

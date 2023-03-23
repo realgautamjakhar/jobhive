@@ -2,9 +2,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 import { api } from "~/utils/api";
-import JobCard from "./JobCard";
 import JobCardSkeleton from "../../../../components/skeleton/JobCardSkeleton";
 import { motionContainer } from "~/utils/animation";
+import JobCard from "~/components/job/JobCard";
 
 const JobList = () => {
   const { data: jobs, refetch: refetchJobs } =
@@ -25,7 +25,7 @@ const JobList = () => {
         >
           <AnimatePresence>
             {jobs?.map((job) => {
-              return <JobCard refetch={refetchJobs} job={job} key={job.id} />;
+              return <JobCard job={job} key={job.id} />;
             })}
           </AnimatePresence>
         </motion.ul>

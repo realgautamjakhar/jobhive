@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import type { IconType } from "react-icons";
@@ -10,6 +11,7 @@ import {
   BiRupee,
   BiTimeFive,
 } from "react-icons/bi";
+import AdminJobCardControl from "~/app/(admin)/admin/components/AdminJobCardControl";
 import TimeAgoComponent from "~/components/TimeAgo";
 import { motionItem } from "~/utils/animation";
 import type { RouterOutputs } from "~/utils/api";
@@ -34,6 +36,7 @@ const TextItem = ({
 };
 
 const JobCard = ({ job }: { job: Job }) => {
+  const { data: session } = useSession();
   return (
     <motion.li
       variants={motionItem}
@@ -109,6 +112,8 @@ const JobCard = ({ job }: { job: Job }) => {
           by {job.company.name}
         </p>
       </div>
+
+      {session?.user.isAdmin && <AdminJobCardControl job={job} />}
     </motion.li>
   );
 };
