@@ -33,7 +33,7 @@ type Company = RouterOutputs["company"]["get"];
 const UpdateCompanyModal = ({ company }: { company: Company }) => {
   const { data: session } = useSession();
 
-  const updateCompany = api.company.update.useMutation({
+  const updateCompany = api.company.updateAdminCompany.useMutation({
     onSuccess: () => {
       toast.success("Company Update SuccessFully");
     },

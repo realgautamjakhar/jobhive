@@ -41,17 +41,19 @@ export default function ComboBox({
   return (
     <Combobox value={selectedOption} onChange={handleSelection} nullable>
       <div className="relative mt-1">
-        <p className=" pb-1 text-center text-sm text-gray-900">{title}</p>
-        <div className="relative w-full cursor-default overflow-hidden rounded-full text-left shadow-2xl shadow-accent-100 ring-1  ring-accent-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+        <p className=" pb-1  text-xs capitalize text-gray-600 dark:text-gray-100">
+          {title}
+        </p>
+        <div className="relative w-full cursor-default overflow-hidden rounded-md text-left shadow-2xl shadow-accent-100 ring-1  ring-accent-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
           <Combobox.Input
             placeholder="Select any options"
-            className="w-full border-none bg-white  py-2 pl-6 pr-10  capitalize text-gray-900 focus:outline-none focus:ring-0"
+            className="w-full border-none bg-white  py-2 pl-4 pr-10  capitalize text-gray-900 focus:outline-none focus:ring-0"
             displayValue={(option: option) => option?.title}
             onChange={(event) => setQuery(event.target.value)}
           />
           <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-4">
             <HiChevronUpDown
-              className="h-5 w-5 text-gray-400"
+              className="h-5 w-5 stroke-1 text-accent-500"
               aria-hidden="true"
             />
           </Combobox.Button>
@@ -91,7 +93,7 @@ export default function ComboBox({
                       {selected ? (
                         <span
                           className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                            active ? "text-white" : "text-teal-600"
+                            active ? "text-white" : "text-accent-500"
                           }`}
                         >
                           <RiCheckLine className="h-5 w-5" aria-hidden="true" />

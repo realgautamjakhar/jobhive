@@ -140,6 +140,8 @@ export const jobRouter = createTRPCRouter({
         },
       });
     }),
+
+  //Admin Create
   create: adminProcedure
     .input(
       z.object({
@@ -185,6 +187,7 @@ export const jobRouter = createTRPCRouter({
         },
       });
     }),
+
   userCreate: protectedProcedure
     .input(
       z.object({

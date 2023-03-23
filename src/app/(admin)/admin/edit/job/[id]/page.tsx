@@ -387,8 +387,8 @@ const EditJobPage = ({ params: { id } }: Params) => {
                 </div>
               </div>
               <PrimaryButton
-                loading={editJob.isLoading}
-                disable={editJob.isLoading}
+                loading={updateAdminJob.isLoading}
+                disable={updateAdminJob.isLoading}
                 className=" my-4 w-full"
                 type="submit"
               >

@@ -29,31 +29,10 @@ const CompanyCard = ({ company }: { company: Company }) => {
           className="m-auto aspect-square h-full max-h-16 w-full  max-w-[5rem] object-contain"
           alt={company.name}
         />
-        <div className=" grid md:gap-2">
-          <h2 className=" text-lg font-medium capitalize line-clamp-1">
-            {company.name.toLowerCase()}
-          </h2>
-          {/* <div className="  flex w-full gap-4 text-gray-400 md:justify-center">
-            <a
-              title={`${company.name} website link`}
-              href={company.website}
-              target="_blank"
-            >
-              <AiOutlineGlobal
-                className="  transition-all duration-300 ease-in-out hover:text-accent-500 "
-                size={18}
-              />
-            </a>
-            <a
-              title={`${company.name} linkedin profile link`}
-              href={company.linkedin}
-              target="_blank"
-              className="   transition-all duration-300 ease-in-out hover:text-accent-500 "
-            >
-              <AiFillLinkedin size={18} />
-            </a>
-          </div> */}
-        </div>
+
+        <h2 className=" text-lg font-medium capitalize line-clamp-1">
+          {company.name.toLowerCase()}
+        </h2>
       </Link>
     </motion.li>
   );

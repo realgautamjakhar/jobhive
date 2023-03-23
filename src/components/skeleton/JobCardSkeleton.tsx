@@ -6,15 +6,13 @@ const JobCardSkeleton = () => {
         <h2 className="font-medium capitalize line-clamp-2">
           <p className=" skeleton h-4 w-[100%]  rounded-full" />
         </h2>
-        <div className=" col-span-2 my-2 flex flex-wrap gap-2 md:col-span-1">
+        <div className=" col-span-2 my-2 flex flex-wrap gap-4 py-4 md:col-span-1">
+          <p className=" skeleton h-4 w-[25%]  rounded-full" />
+        </div>
+        <div className=" col-span-2 flex flex-wrap items-center gap-4 md:col-span-1">
           <p className=" skeleton h-4 w-[25%]  rounded-full" />
           <p className=" skeleton h-4 w-[25%]  rounded-full" />
         </div>
-        <ul className=" col-span-2 flex flex-wrap items-center gap-4 md:col-span-1">
-          <p className=" skeleton h-4 w-[25%]  rounded-full" />
-          <p className=" skeleton h-4 w-[25%]  rounded-full" />{" "}
-          <p className=" skeleton h-4 w-[25%]  rounded-full" />
-        </ul>
       </div>
     </li>
   );

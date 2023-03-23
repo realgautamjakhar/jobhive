@@ -60,24 +60,28 @@ const Search = () => {
         size={24}
         className=" absolute inset-y-0 left-4 h-full  text-dark-500"
       />
-      {searchInput && (
-        <BiX
-          size={24}
-          onClick={() => {
-            setSearchInput("");
-            setSearchedJobs([]);
-          }}
-          className=" absolute inset-y-0 right-28 h-full cursor-pointer  text-dark-500"
-        />
-      )}
-      <SecondaryButton
-        loading={searchJob.isLoading}
-        disable={searchJob.isLoading}
-        onClick={() => handleSearch()}
-        className=" mr-1 h-full w-fit rounded-full  bg-darkGradient py-2  px-4 text-sm text-white"
-      >
-        Search
-      </SecondaryButton>
+      <div className=" relative">
+        <SecondaryButton
+          loading={searchJob.isLoading}
+          disable={searchJob.isLoading}
+          onClick={() => handleSearch()}
+          className=" mr-1 h-full w-fit rounded-full  bg-darkGradient py-2  px-4 text-sm text-white"
+        >
+          Search
+        </SecondaryButton>
+
+        {searchInput && (
+          <BiX
+            size={24}
+            title="Clean the search"
+            onClick={() => {
+              setSearchInput("");
+              setSearchedJobs([]);
+            }}
+            className=" absolute inset-y-0 -left-7 h-full cursor-pointer text-dark-500 transition-all  duration-200 ease-in-out  hover:scale-110"
+          />
+        )}
+      </div>
       {searchedJobs?.length > 0 && searchInput ? (
         <div>
           <SearchDropDown searchedJobs={searchedJobs} />

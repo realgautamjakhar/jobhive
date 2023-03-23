@@ -47,7 +47,6 @@ export const api = createTRPCNext<AppRouter>({
       queryClientConfig: {
         defaultOptions: {
           queries: {
-            refetchOnMount: false,
             staleTime: 1000 * 60 * 5, // 5 minutes
             cacheTime: 1000 * 60 * 10, // 10 minutes
             retry: 3,

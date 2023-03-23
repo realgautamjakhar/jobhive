@@ -15,7 +15,7 @@ const LinkItem = ({ href, title }: { href: string; title: string }) => {
   );
 };
 
-const Links = async () => {
+const CategoryLinks = async () => {
   const categories = await prisma.category.findMany();
 
   return (
@@ -34,4 +34,4 @@ const Links = async () => {
   );
 };
 
-export default Links;
+export default CategoryLinks;

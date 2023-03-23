@@ -14,13 +14,13 @@ const JobList = () => {
 
   async function fetchJobs() {
     const skip = jobs?.length || 0;
-    //Backend is working on pagination like infinite scroll you have to add the previous job remove the duplicated and create whole new jobs and set to the state
+
     const newData = await getJobs.mutateAsync({ skip }); //Return new 5 jobs
     const uniqueJobs = removeDuplicates([
       ...(jobs || []),
       ...(newData?.jobs || []),
     ]);
-    // const allJobs = [...(jobs || []), ...(newData?.jobs || [])];
+
     setJobs(uniqueJobs);
     setHasMore(newData.hasMore);
   }

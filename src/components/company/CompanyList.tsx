@@ -3,12 +3,15 @@ import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { motionContainer, motionItem } from "~/utils/animation";
 import { api } from "~/utils/api";
+import type { RouterOutputs } from "~/utils/api";
 import SecondaryButton from "~/components/button/SecondaryButton";
 import CompanyCardSkeleton from "../skeleton/CompanyCardSkeleton";
 import CompanyCard from "./CompanyCard";
 
+type Company = RouterOutputs["company"]["getAll"][0];
+
 const CompanyList = () => {
-  const [companies, setCompanies] = useState<any>();
+  const [companies, setCompanies] = useState<Company[]>();
   const [hasMore, setHasMore] = useState<boolean>();
 
   const getCompanies = api.company.infiniteCompanies.useMutation({
@@ -28,7 +31,7 @@ const CompanyList = () => {
     setHasMore(newData.hasMore);
   };
 
-  function removeDuplicates(companies: any) {
+  function removeDuplicates(companies: Company[]) {
     const companiesSet = new Set();
     return companies.filter((company) => {
       if (companiesSet.has(company.id)) {
@@ -39,6 +42,7 @@ const CompanyList = () => {
       }
     });
   }
+
   useEffect(() => {
     fetchCompanies();
   }, []);
@@ -69,7 +73,7 @@ const CompanyList = () => {
                 loading={getCompanies.isLoading}
                 disable={getCompanies.isLoading}
               >
-                <p>Load More</p>
+                Load More
               </SecondaryButton>
             </motion.li>
           )}
