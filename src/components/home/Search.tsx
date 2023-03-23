@@ -120,6 +120,7 @@ const SearchDropDown = ({ searchedJobs }: { searchedJobs: Job[] }) => {
             <Link
               href={`/job/${job.id}`}
               className="grid  grid-cols-[auto_1fr] grid-rows-[3,auto] items-center gap-2  gap-x-4"
+              target={"_blank"}
             >
               <Image
                 width={80}
