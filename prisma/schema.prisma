@@ -70,14 +70,14 @@ model Job {
     desc      String? //Job Description and skills
     type      JobType   @default(CONTRACT) //Full time part time etc
     workPlace WorkPlace @default(OFFICE) // office remote hybrid
-    location  String?   @default("home")
+    location  String?   @default("")
 
-    education String
+    education String  @default("Any")
     role      String? //Job roles like full stack etc
 
-    salary        Int? // In lpa
-    experienceMin Int?
-    experienceMax Int?
+    salary        Int? @default(0)
+    experienceMin Int? @default(0)
+    experienceMax Int? @default(0)
 
     applyUrl         String?
     applyEmail       String?

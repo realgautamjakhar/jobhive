@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { BiSearch } from "react-icons/bi";
 
 const SearchInput = ({
   onChange,
@@ -21,15 +22,24 @@ const SearchInput = ({
   }, [input, onChange]);
 
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="Search Job Title / Company"
-        className={`w-full rounded-md  bg-white py-2 pl-4 text-sm font-normal text-gray-900 ring-1 ring-gray-500 ring-opacity-25 placeholder:text-sm placeholder:text-gray-400  hover:ring-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500 dark:text-gray-50 dark:ring-opacity-50`}
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-      />
-    </div>
+    <>
+      <label className="relative block">
+        <span className="sr-only">Search</span>
+        <BiSearch
+          className="absolute inset-y-0 left-2 flex h-full  w-5   text-accent-500 "
+          size={26}
+        />
+
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          className=" block w-full rounded-md bg-white py-2 pl-9 pr-3 shadow-sm ring-1 ring-accent-100 placeholder:italic placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-accent-500 sm:text-sm"
+          placeholder="Search for anything..."
+          type="text"
+          name="search"
+        />
+      </label>
+    </>
   );
 };
 

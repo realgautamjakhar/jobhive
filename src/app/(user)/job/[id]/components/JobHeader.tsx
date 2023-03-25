@@ -36,18 +36,18 @@ const TextItem = ({
 
 const JobHeader = ({ job }: { job: Job }) => {
   return (
-    <div>
-      <h2 className=" py-4 text-[clamp(1rem,10vw,2rem)] font-medium capitalize">
+    <div className=" rounded-md bg-white p-4">
+      <h2 className=" text-[clamp(1rem,10vw,2rem)] font-medium capitalize">
         {job.title}
       </h2>
       <div className=" flex gap-2">
-        <p className=" w-fit rounded-full bg-dark-500 px-4 py-1 text-xs text-white">
+        <p className=" w-fit rounded-full  px-4 py-1 text-xs capitalize text-gray-700">
           <TimeAgoComponent createdAt={job.createdAt} />
         </p>
-        <p className=" w-fit rounded-full bg-dark-500 px-4 py-1 text-xs  capitalize text-white">
+        <p className=" w-fit rounded-full  px-4 py-1 text-xs capitalize text-gray-700">
           {job.type.replaceAll("_", " ").toLowerCase()}
         </p>
-        <p className=" w-fit rounded-full bg-dark-500 px-4 py-1 text-xs capitalize text-white">
+        <p className=" w-fit rounded-full  px-4 py-1 text-xs capitalize text-gray-700">
           {job.workPlace.replaceAll("_", " ").toLowerCase()}
         </p>
       </div>

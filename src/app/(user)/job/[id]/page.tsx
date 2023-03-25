@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import JobAdminControl from "~/app/(admin)/admin/components/JobAdminControl";
 import { prisma } from "~/server/db";
 import JobHeader from "./components/JobHeader";
+import NotApproved from "./components/NotApproved";
+import NotFound from "./components/NotFound";
 import SideBar from "./components/SideBar";
+import SideBarV2 from "./components/SideBarV2";
 
 type Params = {
   params: {
@@ -52,25 +55,39 @@ const JobPage = async ({ params: { id } }: Params) => {
       company: true,
     },
   });
+  if (!job.approved) return <NotApproved />;
+  if (!job) return <NotFound />;
   return (
-    <main className=" mx-auto grid h-full w-full max-w-7xl gap-6 px-4 pb-16 md:grid-cols-[72%_1fr] md:py-10 ">
+    <main className=" mx-auto grid h-full w-full max-w-7xl gap-6 px-4 py-4 pb-16 md:grid-cols-[72%_1fr] md:py-10 ">
       <JobAdminControl jobId={job.id} />
 
-      <div>
+      <div className=" flex flex-col gap-6">
         <JobHeader job={job} />
-        <div>
-          <h2 className=" py-4 text-[clamp(1rem,10vw,1.5rem)] font-medium capitalize">
+        <div className=" rounded-md bg-white p-4">
+          <h2 className="pb-2 text-[clamp(1rem,10vw,1.5rem)] font-medium capitalize">
             Job Description
           </h2>
           <div
             dangerouslySetInnerHTML={{ __html: `${job.desc}` }}
-            className=" richtext  max-w-[70ch] text-sm"
+            className=" richtext "
           />
         </div>
+        {job?.applyInstruction && (
+          <div className=" rounded-md bg-white p-4">
+            <h2 className="pb-2 text-[clamp(1rem,10vw,1.5rem)] font-medium capitalize">
+              Apply Instruction
+            </h2>
+            <div
+              dangerouslySetInnerHTML={{ __html: `${job.applyInstruction}` }}
+              className=" richtext "
+            />
+          </div>
+        )}
       </div>
 
       {/* Client side component due to framer motion animation  */}
-      <SideBar job={job} />
+      {/* <SideBar job={job} /> */}
+      <SideBarV2 job={job} />
     </main>
   );
 };

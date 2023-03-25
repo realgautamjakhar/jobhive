@@ -48,6 +48,11 @@ export const companyRouter = createTRPCRouter({
         },
         include: {
           jobs: {
+            where: {
+              approved: {
+                equals: true,
+              },
+            },
             orderBy: {
               updatedAt: "desc",
             },

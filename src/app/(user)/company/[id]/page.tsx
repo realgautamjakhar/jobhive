@@ -41,13 +41,22 @@ const CompanyPage = async ({ params: { id } }: Params) => {
       id: id,
     },
     include: {
-      jobs: true,
+      jobs: {
+        where: {
+          approved: {
+            equals: true,
+          },
+        },
+        orderBy: {
+          updatedAt: "desc",
+        },
+      },
     },
   });
   return (
     <main className=" mx-auto h-full w-full max-w-7xl py-10 px-4">
       <CompanyAdminControl companyId={company.id} />
-      <div className=" relative grid grid-cols-[minmax(auto,30%)_1fr] rounded-2xl bg-accentGradient shadow-2xl shadow-accent-100 ">
+      <div className=" relative grid grid-cols-[minmax(auto,30%)_1fr] rounded-3xl bg-accentGradient shadow-2xl shadow-accent-100 ">
         <div className="  flex h-full w-full md:bg-white/25">
           <Image
             src={company?.logo}

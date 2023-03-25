@@ -155,6 +155,44 @@ export const jobRouter = createTRPCRouter({
       });
     }),
 
+  getUserJobs: protectedProcedure
+    .input(z.object({ skip: z.number().default(0), userId: z.string() }))
+    .mutation(async ({ input }) => {
+      const limit = 5;
+      const jobs = await prisma.job.findMany({
+        where: {
+          userId: input.userId,
+        },
+
+        include: {
+          company: true,
+          category: true,
+          subCategory: true,
+        },
+        orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
+        take: limit + 1, // fetch one more tweet than needed
+        skip: input.skip || 0,
+      });
+      const hasMore = jobs?.length > limit;
+      if (hasMore) {
+        jobs.pop();
+      }
+      return {
+        jobs,
+        hasMore,
+      };
+    }),
+
+  userJobDelete: protectedProcedure
+    .input(z.object({ userId: z.string(), id: z.string() }))
+    .mutation(({ input, ctx }) => {
+      return ctx.prisma.job.deleteMany({
+        where: {
+          AND: [{ id: input.id, userId: input.userId }],
+        },
+      });
+    }),
+
   //Admin Create
   create: adminProcedure
     .input(
@@ -162,16 +200,19 @@ export const jobRouter = createTRPCRouter({
         title: z.string(),
         desc: z.string(),
         type: z.enum(["FULL_TIME", "PART_TIME", "CONTRACT", "TEMPORARY"]),
-        education: z.string(),
+        education: z.string().default("Any Graduate"),
         role: z.string(),
-        experienceMin: z.number(),
-        experienceMax: z.number(),
-        salary: z.number(),
+        experienceMin: z.number().optional(),
+        experienceMax: z.number().optional(),
+        salary: z.number().optional(),
         workPlace: z.enum(["OFFICE", "REMOTE", "HYBRID"]),
-        location: z.string(),
+        location: z.string().optional(),
         companyId: z.string(),
         categoryId: z.string(),
         subCategoryId: z.string(),
+        applyUrl: z.string().optional(),
+        applyInstruction: z.string().optional(),
+        applyEmail: z.string().optional(),
         approved: z.boolean(),
         featured: z.boolean(),
         userId: z.string(),
@@ -193,6 +234,9 @@ export const jobRouter = createTRPCRouter({
           companyId: input.companyId,
           categoryId: input.categoryId,
           subCategoryId: input.subCategoryId,
+          applyUrl: input.applyUrl,
+          applyInstruction: input.applyInstruction,
+          applyEmail: input.applyEmail,
           approved: input.approved,
           featured: input.featured,
           userId: input.userId,
@@ -206,16 +250,19 @@ export const jobRouter = createTRPCRouter({
         title: z.string(),
         desc: z.string(),
         type: z.enum(["FULL_TIME", "PART_TIME", "CONTRACT", "TEMPORARY"]),
-        education: z.string(),
+        education: z.string().default("Any Graduate"),
         role: z.string(),
-        experienceMin: z.number(),
-        experienceMax: z.number(),
-        salary: z.number(),
-        workPlace: z.enum(["OFFICE", "REMOTE", "HYBRID"]),
-        location: z.string(),
+        experienceMin: z.number().optional(),
+        experienceMax: z.number().optional(),
+        salary: z.number().optional(),
+        workPlace: z.enum(["OFFICE", "REMOTE", "HYBRID"]).default("REMOTE"),
+        location: z.string().optional(),
         companyId: z.string(),
         categoryId: z.string(),
         subCategoryId: z.string(),
+        applyUrl: z.string().optional(),
+        applyInstruction: z.string().optional(),
+        applyEmail: z.string().optional(),
         userId: z.string(),
       })
     )
@@ -235,6 +282,9 @@ export const jobRouter = createTRPCRouter({
           companyId: input.companyId,
           categoryId: input.categoryId,
           subCategoryId: input.subCategoryId,
+          applyUrl: input.applyUrl,
+          applyInstruction: input.applyInstruction,
+          applyEmail: input.applyEmail,
           userId: input.userId,
         },
       });

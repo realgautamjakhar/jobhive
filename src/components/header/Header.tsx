@@ -2,7 +2,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { BiAddToQueue } from "react-icons/bi";
+import { BiAddToQueue, BiLogOut } from "react-icons/bi";
 import LinkIcon from "../button/LinkIcon";
 import SecondaryButton from "../button/SecondaryButton";
 
@@ -40,43 +40,54 @@ const Header = () => {
         <ul className=" flex items-center gap-2">
           {session?.user ? (
             <>
-              <li className="  hidden items-center gap-2 md:flex">
-                <Image
-                  src={session?.user?.image || ""}
-                  alt="user avatar"
-                  width={25}
-                  height={25}
-                  className=" rounded-full"
-                />
-                <p className=" hidden text-xs  hover:text-accent-500 md:block">
-                  {session?.user?.name}
-                </p>
+              <li>
+                <Link
+                  href={"/profile"}
+                  className=" flex items-center gap-2 rounded-full bg-white py-2 pl-2 pr-4 text-sm text-gray-700  transition-all duration-300 ease-in-out hover:bg-accent-500 hover:text-gray-50 "
+                >
+                  <Image
+                    src={session?.user?.image || ""}
+                    alt="user avatar"
+                    width={20}
+                    height={20}
+                    className=" rounded-full"
+                  />
+                  <p className=" hidden  md:block">{session?.user?.name}</p>
+                </Link>
               </li>
               {session?.user.isAdmin && (
-                <li className=" flex items-center gap-2">
-                  <Link href="/admin">Admin</Link>
-                </li>
+                <Link
+                  href="/admin"
+                  title="Go to admin page"
+                  className=" flex items-center gap-2 rounded-full bg-white py-2 px-4 text-sm text-gray-700  transition-all duration-300 ease-in-out hover:bg-accent-500 hover:text-gray-50 "
+                >
+                  Admin
+                </Link>
               )}
               {!session?.user.isAdmin && (
-                <LinkIcon
-                  title="List Job"
-                  icon={BiAddToQueue}
+                <Link
                   href="/list/job"
-                />
+                  title="List new Job"
+                  className=" flex items-center gap-2 rounded-full bg-white py-2 px-4 text-sm text-gray-700  transition-all duration-300 ease-in-out hover:bg-accent-500 hover:text-gray-50 "
+                >
+                  <BiAddToQueue /> <p className=" hidden md:block">List Job</p>
+                </Link>
               )}
               <li>
                 <SecondaryButton
-                  className=" text-gray-700"
+                  className=" flex items-center gap-2 rounded-full bg-white py-2 px-4 text-sm text-gray-700  transition-all duration-300 ease-in-out hover:bg-accent-500 hover:text-gray-50 "
+                  title="Log out"
                   onClick={() => void signOut()}
                 >
-                  Log Out
+                  <BiLogOut />
+                  <p className=" hidden md:block">Log Out</p>
                 </SecondaryButton>
               </li>
             </>
           ) : (
             <li>
               <SecondaryButton
-                className=" rounded-full  bg-accentGradient py-2 px-4 text-white shadow-xl shadow-accent-500/20"
+                className=" rounded-full bg-white py-2 px-4 text-gray-700  transition-all duration-300 ease-in-out hover:bg-accent-500 hover:text-gray-50 "
                 onClick={() => void signIn("google")}
               >
                 Sign In

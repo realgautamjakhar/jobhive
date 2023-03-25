@@ -12,6 +12,7 @@ import {
   BiTimeFive,
 } from "react-icons/bi";
 import AdminJobCardControl from "~/app/(admin)/admin/components/AdminJobCardControl";
+import UserJobCardControl from "~/app/(user)/profile/components/UserJobCardControl";
 import TimeAgoComponent from "~/components/TimeAgo";
 import { motionItem } from "~/utils/animation";
 import type { RouterOutputs } from "~/utils/api";
@@ -28,10 +29,10 @@ const TextItem = ({
   icon: IconType;
 }) => {
   return (
-    <li className="  flex  items-center gap-1 text-sm capitalize">
+    <div className="  flex  items-center gap-1 text-sm capitalize">
       <Icon size={16} className="text-accent-400" title={prefix ?? ""} />
       <span className="text-sm text-gray-500 line-clamp-1">{suffix}</span>
-    </li>
+    </div>
   );
 };
 
@@ -85,24 +86,29 @@ const JobCard = ({ job }: { job: Job }) => {
             }
           />
         </div>
-        <ul className=" col-span-2 my-2 flex flex-wrap items-center gap-y-1  gap-x-6 md:col-span-1 md:my-[revert]">
+        <div className=" col-span-2 my-2 flex flex-wrap items-center gap-y-1  gap-x-6 md:col-span-1 md:my-[revert]">
           <TextItem
             prefix="Salary"
             suffix={job.salary ? `${job.salary} lpa` : "Not Disclosed"}
             icon={BiRupee}
           />
+
           <TextItem
             suffix={
-              job?.experienceMin !== job?.experienceMax
+              job?.experienceMin && job?.experienceMax
                 ? ` ${
                     job?.experienceMin === 0 ? "Fresher" : job.experienceMin
                   } - ${job.experienceMax} yrs`
+                : job?.experienceMin && !job?.experienceMax
+                ? ` ${job?.experienceMin} yr+`
                 : "Not Disclosed"
             }
             icon={BiBriefcase}
           />
-          <TextItem prefix="Location" suffix={job.location} icon={BiMap} />
-        </ul>
+          {job?.location && (
+            <TextItem prefix="Location" suffix={job.location} icon={BiMap} />
+          )}
+        </div>
       </Link>
       <div className=" grid grid-cols-2 ">
         <p className=" flex h-full max-h-6 w-fit  items-center rounded-full py-1 px-4 text-xs capitalize  text-gray-500 md:bottom-1 md:right-1">
@@ -112,7 +118,9 @@ const JobCard = ({ job }: { job: Job }) => {
           by {job.company.name}
         </p>
       </div>
-
+      {session?.user.id === job.userId && !session?.user.isAdmin && (
+        <UserJobCardControl job={job} />
+      )}
       {session?.user.isAdmin && <AdminJobCardControl job={job} />}
     </motion.li>
   );

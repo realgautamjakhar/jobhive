@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -8,10 +9,11 @@ import { api } from "~/utils/api";
 
 const AdminJobCardControl = ({ job }) => {
   const ctx = api.useContext();
-
+  const router = useRouter();
   const deleteJob = api.job.deleteJob.useMutation({
     onSuccess: () => {
       toast.success("Deleted Successfully");
+      router.refresh();
       void ctx.job.adminGetAllJobs.invalidate();
     },
     onError: () => {

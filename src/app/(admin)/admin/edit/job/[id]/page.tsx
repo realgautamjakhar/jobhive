@@ -10,28 +10,13 @@ import RichTextEditor from "~/components/input/RichTextEditor";
 import Loader from "~/components/Loader";
 import { toast } from "react-hot-toast";
 import { useSession } from "next-auth/react";
+import CheckBoxV1 from "~/components/input/CheckBoxV1";
+import SelectV1 from "~/components/input/SelectV1";
 type Params = {
   params: {
     id: string;
   };
 };
-
-interface Values {
-  title: string;
-  type: JobType;
-  education: string;
-  role: string;
-  salary: number;
-  experienceMin: number;
-  experienceMax: number;
-  workPlace: WorkPlace;
-  location: string;
-  companyId: string;
-  categoryId: string;
-  subCategoryId: string;
-  featured: boolean;
-  approved: boolean;
-}
 
 const DisplayingErrorMessagesSchema = Yup.object().shape({
   title: Yup.string()
@@ -102,7 +87,7 @@ const EditJobPage = ({ params: { id } }: Params) => {
           approved: job.approved,
         }}
         validationSchema={DisplayingErrorMessagesSchema}
-        onSubmit={(values: Values) => {
+        onSubmit={(values: JobListType) => {
           void updateAdminJob.mutate({
             id: job.id,
             title: values.title,
@@ -134,45 +119,44 @@ const EditJobPage = ({ params: { id } }: Params) => {
                 title="title"
                 placeholder="Job Title"
               />
-              <div className=" pb-4">
-                <h2 className="pb-1 pl-2 text-sm capitalize text-gray-900 dark:text-gray-100">
-                  Job Description
-                </h2>
-                <RichTextEditor value={desc} onChange={setDesc} />
-              </div>
+
+              <RichTextEditor
+                value={desc}
+                onChange={setDesc}
+                title="Job Description"
+              />
+
               {companies && (
-                <div>
-                  <h2 className="pb-1 pl-2 text-sm capitalize text-gray-900 dark:text-gray-100">
-                    Select Company for the list *
-                  </h2>
-                  <Field
-                    as="select"
-                    name="companyId"
-                    className="w-full rounded-md  bg-transparent p-2 text-base font-normal capitalize  text-gray-900 ring-1  ring-accent-100 placeholder:text-gray-300 focus:outline-none focus:ring-opacity-50 dark:text-gray-50 dark:ring-opacity-50 "
-                  >
-                    <option key={1} value={undefined}>
-                      Select
-                    </option>
-                    {companies?.map((company) => {
-                      return (
-                        <option
-                          key={company.id}
-                          value={company.id}
-                          className=" capitalize"
-                        >
-                          {company.name}
-                        </option>
-                      );
-                    })}
-                  </Field>
-                </div>
+                <SelectV1
+                  options={companies}
+                  name="companyId"
+                  title="Select Company *"
+                />
               )}
+
+              <div className="grid grid-cols-2 gap-4">
+                {categories && (
+                  <SelectV1
+                    options={categories}
+                    name="categoryId"
+                    title="Job Department *"
+                  />
+                )}
+                {subCategories && (
+                  <SelectV1
+                    options={subCategories}
+                    name="subCategoryId"
+                    title="Job Role Position"
+                  />
+                )}
+              </div>
+
               <Field
                 component={TextInput}
                 name="education"
                 id="education"
                 title="education"
-                placeholder="BTech / MCA / any"
+                placeholder="Any / Btech / MCA"
               />
               <Field
                 component={TextInput}
@@ -181,32 +165,30 @@ const EditJobPage = ({ params: { id } }: Params) => {
                 title="role"
                 placeholder="SDE 1 ~ / Web Developer / Driver 🫥 "
               />
-              <Field
-                component={TextInput}
-                name="industry"
-                id="industry"
-                title="industry"
-                placeholder="Ecommerce / Logistics / Fintech / Edtech"
-              />
-              <Field
-                component={TextInput}
-                name="department"
-                id="department"
-                title="department"
-                placeholder="Software Development / IT"
-              />
             </div>
+
             <div className=" grid items-start gap-4">
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 gap-4">
+                <SelectV1
+                  options={Object.keys(JobType).map((key) => {
+                    return {
+                      id: JobType[key],
+                      name: key.replaceAll("_", " "),
+                    };
+                  })}
+                  name="type"
+                  title="Employment / Job Type *"
+                />
                 <Field
                   component={TextInput}
                   name="salary"
                   id="salary"
-                  title="salary (lpa)"
+                  title="Salary LPA"
                   type="number"
-                  placeholder="Salary (lpa)"
+                  placeholder="Salary"
                 />
-
+              </div>
+              <div className="grid grid-cols-2 gap-4">
                 <Field
                   component={TextInput}
                   name="experienceMin"
@@ -225,119 +207,27 @@ const EditJobPage = ({ params: { id } }: Params) => {
                   placeholder="Maximum experience"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                {categories && (
-                  <div>
-                    <h2 className="pb-1 pl-2 text-sm capitalize text-gray-900 dark:text-gray-100">
-                      Select Company Field Category
-                    </h2>
-                    <Field
-                      as="select"
-                      name="categoryId"
-                      className="w-full  rounded-md bg-transparent p-2 text-base font-normal  text-gray-900 ring-1  ring-accent-100 placeholder:text-gray-300 focus:outline-none focus:ring-opacity-50 dark:text-gray-50 dark:ring-opacity-50 "
-                    >
-                      <option key={1} value={undefined}>
-                        Select One
-                      </option>
-                      {categories?.map((category) => {
-                        return (
-                          <option key={category.id} value={category.id}>
-                            {category.name}
-                          </option>
-                        );
-                      })}
-                    </Field>
-                  </div>
-                )}
-                {subCategories && (
-                  <div>
-                    <h2 className="pb-1 pl-2 text-sm capitalize text-gray-900 dark:text-gray-100">
-                      Select Job Category
-                    </h2>
-                    <Field
-                      as="select"
-                      name="subCategoryId"
-                      className="w-full rounded-md  bg-transparent p-2 text-base font-normal capitalize  text-gray-900 ring-1  ring-accent-100 placeholder:text-gray-300 focus:outline-none focus:ring-opacity-50 dark:text-gray-50 dark:ring-opacity-50 "
-                    >
-                      <option key={1} value={undefined}>
-                        Select
-                      </option>
-                      {subCategories.map((category) => {
-                        return (
-                          <option
-                            className=" capitalize"
-                            key={category.id}
-                            value={category.id}
-                          >
-                            {category.name}
-                          </option>
-                        );
-                      })}
-                    </Field>
-                  </div>
-                )}
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <h2 className="pb-1 pl-2 text-sm capitalize text-gray-900 dark:text-gray-100">
-                    Select Job Type
-                  </h2>
-                  <Field
-                    as="select"
-                    name="type"
-                    className="w-full rounded-md  bg-transparent p-2 text-base font-normal capitalize  text-gray-900 ring-1  ring-accent-100 placeholder:text-gray-300 focus:outline-none focus:ring-opacity-50 dark:text-gray-50 dark:ring-opacity-50 "
-                  >
-                    <option key={1} value={undefined}>
-                      Select
-                    </option>
-                    {Object.keys(JobType).map((key) => {
-                      return (
-                        <option
-                          key={key}
-                          value={JobType[key]}
-                          className="capitalize"
-                        >
-                          {key.replace("_", " ")}
-                        </option>
-                      );
-                    })}
-                  </Field>
-                </div>
-
-                <div>
-                  <h2 className="pb-1 pl-2 text-sm capitalize text-gray-900 dark:text-gray-100">
-                    Select Working place for job
-                  </h2>
-                  <Field
-                    as="select"
-                    name="workPlace"
-                    className="w-full rounded-md  bg-transparent p-2 text-base font-normal capitalize  text-gray-900 ring-1  ring-accent-100 placeholder:text-gray-300 focus:outline-none focus:ring-opacity-50 dark:text-gray-50 dark:ring-opacity-50 "
-                  >
-                    <option key={1} value={undefined}>
-                      Select
-                    </option>
-                    {Object.keys(WorkPlace).map((key) => {
-                      return (
-                        <option
-                          key={key}
-                          value={WorkPlace[key]}
-                          className="capitalize"
-                        >
-                          {key.replace("_", " ")}
-                        </option>
-                      );
-                    })}
-                  </Field>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <Field
-                  component={TextInput}
-                  name="location"
-                  id="location"
-                  title="location"
-                  placeholder="location"
+              <div className="grid grid-cols-2 justify-end gap-4">
+                <SelectV1
+                  options={Object.keys(WorkPlace).map((key) => {
+                    return {
+                      id: WorkPlace[key],
+                      name: key.replaceAll("_", " "),
+                    };
+                  })}
+                  name="workPlace"
+                  title="Working Place"
                 />
+                {values.workPlace === "HYBRID" ||
+                values.workPlace === "OFFICE" ? (
+                  <Field
+                    component={TextInput}
+                    name="location"
+                    id="location"
+                    title="location"
+                    placeholder="location"
+                  />
+                ) : null}
               </div>
               <Field
                 component={TextInput}
@@ -353,38 +243,14 @@ const EditJobPage = ({ params: { id } }: Params) => {
                 title="Apply Email"
                 placeholder="Apply Email if any"
               />
-              <div className=" pb-4">
-                <h2 className="pb-1 pl-2 text-sm capitalize text-gray-900 dark:text-gray-100">
-                  Apply Instruction if any
-                </h2>
-                <RichTextEditor
-                  value={applyInstruction}
-                  onChange={setApplyInstruction}
-                />
-              </div>
+              <RichTextEditor
+                value={applyInstruction}
+                title="Apply Instruction (if any)"
+                onChange={setApplyInstruction}
+              />
               <div className="  grid grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="featured" className="addon-checkbox mt-5">
-                    <Field type="checkbox" id="featured" name="featured" />
-                    <div className="custom-checkbox" />
-                    <div className="checkbox-content flex">
-                      <p className="text-marineblue  text-sm font-bold capitalize">
-                        featured
-                      </p>
-                    </div>
-                  </label>
-                </div>
-                <div>
-                  <label htmlFor="approved" className="addon-checkbox mt-5">
-                    <Field type="checkbox" id="approved" name="approved" />
-                    <div className="custom-checkbox" />
-                    <div className="checkbox-content flex">
-                      <p className="text-marineblue  text-sm font-bold capitalize">
-                        approved
-                      </p>
-                    </div>
-                  </label>
-                </div>
+                <CheckBoxV1 name={"featured"} id="featured" title="featured" />
+                <CheckBoxV1 name={"approved"} id="approved" title="approved" />
               </div>
               <PrimaryButton
                 loading={updateAdminJob.isLoading}

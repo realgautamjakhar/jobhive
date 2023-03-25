@@ -67,16 +67,16 @@ const ConfirmModal = ({
                   leaveFrom="opacity-100 scale-100"
                   leaveTo="opacity-0 scale-95"
                 >
-                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-3xl bg-light-100 p-4 px-6 text-left align-middle shadow-xl transition-all dark:bg-dark-500">
+                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-md bg-light-100 p-4 px-6 text-left align-middle shadow-xl transition-all dark:bg-dark-500">
                     <Dialog.Title
-                      className={" text-2xl font-medium text-gray-700"}
+                      className={" pb-2 text-2xl font-medium text-gray-700"}
                     >
                       {title}
                     </Dialog.Title>
                     <Dialog.Description>{subTitle}</Dialog.Description>
-                    <div className="mt-6 grid grid-cols-2 gap-6 px-4">
+                    <div className="mt-6 grid grid-cols-2 gap-6">
                       <SecondaryButton
-                        className=" rounded-full bg-red-400 py-2 text-white"
+                        className="  py-2 "
                         onClick={handleOnCancel}
                       >
                         Cancel

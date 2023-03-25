@@ -35,18 +35,18 @@ const InfoCard = ({
       transition={{
         type: "spring",
       }}
-      className="flex items-center justify-between rounded-full bg-dark-700/25 p-4 px-6 capitalize  backdrop-blur-md"
+      className="flex items-center justify-between rounded-md bg-light-500 p-4 px-6 capitalize  backdrop-blur-md"
     >
       <div className=" flex items-center gap-2 text-sm">
         <Icon size={18} />
         {prefix}
       </div>
-      <p className=" text-sm capitalize">{suffix.toLowerCase()}</p>
+      <p className=" text-end text-sm capitalize">{suffix.toLowerCase()}</p>
     </motion.li>
   );
 };
 
-const SideBar = ({ job }: { job: Job }) => {
+const SideBarV2 = ({ job }: { job: Job }) => {
   return (
     <motion.div
       initial={{
@@ -57,7 +57,7 @@ const SideBar = ({ job }: { job: Job }) => {
         opacity: 1,
         y: 0,
       }}
-      className=" grid h-fit grid-rows-[200px_1fr] rounded-3xl bg-accentGradientV2 text-white shadow-2xl shadow-accent-500/25"
+      className="grid h-fit grid-rows-[200px_1fr] rounded-md bg-white text-gray-900"
     >
       <div className=" grid grid-rows-[1fr_auto] justify-center rounded-b-3xl bg-light-100/30">
         <Image
@@ -135,13 +135,28 @@ const SideBar = ({ job }: { job: Job }) => {
           whileTap={{
             scale: 1,
           }}
-          className="flex cursor-pointer items-center justify-center gap-2 rounded-full bg-dark-500 py-3"
+          className="flex cursor-pointer items-center justify-center gap-2 rounded-md bg-accent-500 py-3 text-white"
         >
           Apply Here <BiLink size={18} />
         </motion.a>
+        {job.applyEmail && (
+          <motion.a
+            href={`mailto:${job.applyEmail}`}
+            variants={motionItem}
+            whileHover={{
+              scale: 1.025,
+            }}
+            whileTap={{
+              scale: 1,
+            }}
+            className="flex cursor-pointer items-center justify-center gap-2 text-sm"
+          >
+            Any Query : {job.applyEmail}
+          </motion.a>
+        )}
       </motion.ul>
     </motion.div>
   );
 };
 
-export default SideBar;
+export default SideBarV2;

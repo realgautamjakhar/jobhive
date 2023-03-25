@@ -10,7 +10,7 @@ const AdminPage = () => {
   if (!session?.user.isAdmin) return null;
   return (
     <main className=" mx-auto w-full max-w-7xl py-10">
-      <div className="flex w-full flex-wrap items-center justify-center gap-4">
+      <div className="flex w-full flex-wrap items-center justify-center gap-6">
         <LinkIcon href="/admin/list/job" title="List Job" icon={BiAlarm} />
         <LinkIcon
           href="/admin/list/company"

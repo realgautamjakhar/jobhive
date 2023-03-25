@@ -11,24 +11,7 @@ import PrimaryButton from "~/components/button/PrimaryButton";
 import { JobType, WorkPlace } from "@prisma/client";
 import RichTextEditor from "~/components/input/RichTextEditor";
 import Loader from "~/components/Loader";
-import { FiChevronDown } from "react-icons/fi";
-
-interface Values {
-  title: string;
-  type: JobType | undefined;
-  education: string;
-  role: string;
-  salary: number | undefined;
-  experienceMin: number | undefined;
-  experienceMax: number | undefined;
-  workPlace: WorkPlace | undefined;
-  location: string;
-  companyId: string;
-  categoryId: string;
-  subCategoryId: string;
-  featured: boolean;
-  approved: boolean;
-}
+import SelectV1 from "~/components/input/SelectV1";
 
 const DisplayingErrorMessagesSchema = Yup.object().shape({
   title: Yup.string()
@@ -41,16 +24,25 @@ const DisplayingErrorMessagesSchema = Yup.object().shape({
     .max(20, "Too Long!"),
   role: Yup.string().required("Required"),
   salary: Yup.number().min(0, "Salary can be negative ???"),
-  type: Yup.string().required("Required"),
+  companyId: Yup.string().required("Required"),
+  subCategoryId: Yup.string().required("Required"),
+  categoryId: Yup.string().required("Required"),
 });
 const JobList = () => {
   const { data: session } = useSession();
-  const router = useRouter();
+
   if (!session?.user) {
     toast.error("Please login to perform this action");
   }
 
-  const listJob = api.job.userCreate.useMutation();
+  const listJob = api.job.userCreate.useMutation({
+    onError: (e) => {
+      toast.error(`Something went wrong ${e.message}`);
+    },
+    onSuccess: (e) => {
+      toast.success(`Listed SuccessFully`);
+    },
+  });
 
   const { data: companies, isLoading: isCompaniesLoading } =
     api.company.getAll.useQuery(undefined, {});
@@ -61,9 +53,7 @@ const JobList = () => {
   const [desc, setDesc] = useState<string>(
     "Job Listing Description Such as Skills role responsiblity"
   );
-  const [applyInstruction, setApplyInstruction] = useState<string>(
-    "Job Listing Description Such as Skills role responsiblity"
-  );
+  const [applyInstruction, setApplyInstruction] = useState<string>("");
   if (isCompaniesLoading || isCategoriesLoading || isSubCategoriesLoading) {
     return <Loader />;
   }
@@ -74,24 +64,19 @@ const JobList = () => {
       </h2>
       <Formik
         initialValues={{
-          title: "",
+          title: undefined,
           type: "FULL_TIME",
-          education: "",
-          role: "",
-          experienceMin: undefined,
-          experienceMax: undefined,
-          salary: undefined,
+          education: "Any Graduate",
+          role: undefined,
           workPlace: "REMOTE",
-          location: "",
-          categoryId: categories?.length > 0 ? categories[0].id : "",
-          subCategoryId: subCategories?.length > 0 ? subCategories[0].id : "",
-          companyId: companies?.length > 0 ? companies[0].id : "",
-          featured: false,
-          approved: false,
+          location: undefined,
+          categoryId: undefined,
+          subCategoryId: undefined,
+          companyId: undefined,
         }}
         validationSchema={DisplayingErrorMessagesSchema}
-        onSubmit={(values: Values) => {
-          void listJob.mutate({
+        onSubmit={(values: JobListType) => {
+          listJob.mutate({
             title: values.title,
             desc: desc,
             type: values.type,
@@ -105,6 +90,9 @@ const JobList = () => {
             companyId: values.companyId,
             categoryId: values.categoryId,
             subCategoryId: values.subCategoryId,
+            applyUrl: values.applyUrl,
+            applyEmail: values.applyEmail,
+            applyInstruction: applyInstruction,
             userId: session.user.id,
           });
         }}
@@ -127,87 +115,30 @@ const JobList = () => {
               />
 
               {companies && (
-                <div className=" relative cursor-pointer">
-                  <h2 className=" pb-1  text-xs capitalize text-gray-600 dark:text-gray-100">
-                    Select Company *
-                  </h2>
-                  <Field
-                    as="select"
-                    name="companyId"
-                    className={`w-full rounded-md bg-white py-2 pl-4 text-base font-normal text-gray-900 ring-1 ring-gray-500 ring-opacity-25 placeholder:text-sm placeholder:text-gray-400  focus:outline-none focus:ring-2 focus:ring-accent-500 dark:text-gray-50 dark:ring-opacity-50`}
-                  >
-                    {companies?.map((company) => {
-                      return (
-                        <option
-                          key={company.id}
-                          value={company.id}
-                          className=" capitalize"
-                        >
-                          {company.name}
-                        </option>
-                      );
-                    })}
-                  </Field>
-                  <FiChevronDown
-                    size={24}
-                    className="  absolute inset-y-0 -bottom-6  right-2 z-50 my-auto  text-accent-500 transition-all duration-300 ease-in-out group-hover:text-accent-500"
-                  />
-                </div>
+                <SelectV1
+                  options={companies}
+                  name="companyId"
+                  title="Select Company *"
+                />
               )}
+
               <div className="grid grid-cols-2 gap-4">
                 {categories && (
-                  <div className=" relative">
-                    <h2 className=" pb-1  text-xs capitalize text-gray-600 dark:text-gray-100">
-                      Job Department *
-                    </h2>
-                    <Field
-                      as="select"
-                      name="categoryId"
-                      className={`w-full rounded-md bg-white py-2 pl-4 text-base font-normal text-gray-900 ring-1 ring-gray-500 ring-opacity-25 placeholder:text-sm placeholder:text-gray-400  focus:outline-none focus:ring-2 focus:ring-accent-500 dark:text-gray-50 dark:ring-opacity-50`}
-                    >
-                      {categories?.map((category) => {
-                        return (
-                          <option key={category.id} value={category.id}>
-                            {category.name}
-                          </option>
-                        );
-                      })}
-                    </Field>
-                    <FiChevronDown
-                      size={24}
-                      className="  absolute inset-y-0 -bottom-6  right-2 z-50 my-auto  text-accent-500 transition-all duration-300 ease-in-out group-hover:text-accent-500"
-                    />
-                  </div>
+                  <SelectV1
+                    options={categories}
+                    name="categoryId"
+                    title="Job Department *"
+                  />
                 )}
                 {subCategories && (
-                  <div className=" relative">
-                    <h2 className=" pb-1  text-xs capitalize text-gray-600 dark:text-gray-100">
-                      Job Role *
-                    </h2>
-                    <Field
-                      as="select"
-                      name="subCategoryId"
-                      className={`w-full rounded-md bg-white py-2 pl-4 text-base font-normal text-gray-900 ring-1 ring-gray-500 ring-opacity-25 placeholder:text-sm placeholder:text-gray-400  focus:outline-none focus:ring-2 focus:ring-accent-500 dark:text-gray-50 dark:ring-opacity-50`}
-                    >
-                      {subCategories.map((category) => {
-                        return (
-                          <option
-                            className=" capitalize"
-                            key={category.id}
-                            value={category.id}
-                          >
-                            {category.name}
-                          </option>
-                        );
-                      })}
-                    </Field>{" "}
-                    <FiChevronDown
-                      size={24}
-                      className="  absolute inset-y-0 -bottom-6  right-2 z-50 my-auto  text-accent-500 transition-all duration-300 ease-in-out group-hover:text-accent-500"
-                    />
-                  </div>
+                  <SelectV1
+                    options={subCategories}
+                    name="subCategoryId"
+                    title="Job Role Position"
+                  />
                 )}
               </div>
+
               <Field
                 component={TextInput}
                 name="education"
@@ -225,34 +156,17 @@ const JobList = () => {
             </div>
 
             <div className=" grid items-start gap-4">
-              {" "}
               <div className="grid grid-cols-2 gap-4">
-                <div className=" relative">
-                  <h2 className=" pb-1  text-xs capitalize text-gray-600 dark:text-gray-100">
-                    Employment / Job Type *
-                  </h2>
-                  <Field
-                    as="select"
-                    name="type"
-                    className={`w-full rounded-md bg-white py-2 pl-4 text-base font-normal text-gray-900 ring-1 ring-gray-500 ring-opacity-25 placeholder:text-sm placeholder:text-gray-400  focus:outline-none focus:ring-2 focus:ring-accent-500 dark:text-gray-50 dark:ring-opacity-50`}
-                  >
-                    {Object.keys(JobType).map((key) => {
-                      return (
-                        <option
-                          key={key}
-                          value={JobType[key]}
-                          className="capitalize"
-                        >
-                          {key.replace("_", " ")}
-                        </option>
-                      );
-                    })}
-                  </Field>
-                  <FiChevronDown
-                    size={24}
-                    className="  absolute inset-y-0 -bottom-6  right-2 z-50 my-auto  text-accent-500 transition-all duration-300 ease-in-out group-hover:text-accent-500"
-                  />
-                </div>{" "}
+                <SelectV1
+                  options={Object.keys(JobType).map((key) => {
+                    return {
+                      id: JobType[key],
+                      name: key.replaceAll("_", " "),
+                    };
+                  })}
+                  name="type"
+                  title="Employment / Job Type *"
+                />
                 <Field
                   component={TextInput}
                   name="salary"
@@ -281,33 +195,17 @@ const JobList = () => {
                   placeholder="Maximum experience"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className=" relative">
-                  <h2 className=" pb-1  text-xs capitalize text-gray-600 dark:text-gray-100">
-                    Working Place
-                  </h2>
-                  <Field
-                    as="select"
-                    name="workPlace"
-                    className={`w-full cursor-pointer rounded-md bg-white py-2 pl-4 text-base font-normal text-gray-900 ring-1 ring-gray-500 ring-opacity-25 placeholder:text-sm placeholder:text-gray-400  focus:outline-none focus:ring-2 focus:ring-accent-500 dark:text-gray-50 dark:ring-opacity-50`}
-                  >
-                    {Object.keys(WorkPlace).map((key) => {
-                      return (
-                        <option
-                          key={key}
-                          value={WorkPlace[key]}
-                          className="capitalize"
-                        >
-                          {key.replace("_", " ")}
-                        </option>
-                      );
-                    })}
-                  </Field>
-                  <FiChevronDown
-                    size={24}
-                    className="  absolute inset-y-0 -bottom-6  right-2 z-50 my-auto  text-accent-500 transition-all duration-300 ease-in-out group-hover:text-accent-500"
-                  />
-                </div>
+              <div className="grid grid-cols-2 justify-end gap-4">
+                <SelectV1
+                  options={Object.keys(WorkPlace).map((key) => {
+                    return {
+                      id: WorkPlace[key],
+                      name: key.replaceAll("_", " "),
+                    };
+                  })}
+                  name="workPlace"
+                  title="Working Place"
+                />
                 {values.workPlace === "HYBRID" ||
                 values.workPlace === "OFFICE" ? (
                   <Field
