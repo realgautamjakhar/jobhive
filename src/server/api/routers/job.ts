@@ -18,6 +18,39 @@ export const jobRouter = createTRPCRouter({
       },
     });
   }),
+  adminGetApprovedJobs: adminProcedure.query(() => {
+    return prisma.job.findMany({
+      where: {
+        approved: {
+          equals: true,
+        },
+      },
+      include: {
+        company: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 20,
+    });
+  }),
+  adminGetUnApprovedJobs: adminProcedure.query(() => {
+    return prisma.job.findMany({
+      where: {
+        approved: {
+          equals: false,
+        },
+      },
+      include: {
+        company: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 20,
+    });
+  }),
+
   //Get single Jobs listing
   get: publicProcedure
     .input(z.object({ id: z.string() }))

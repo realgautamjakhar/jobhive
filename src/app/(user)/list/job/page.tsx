@@ -25,6 +25,7 @@ const DisplayingErrorMessagesSchema = Yup.object().shape({
   role: Yup.string().required("Required"),
   salary: Yup.number().min(0, "Salary can be negative ???"),
   companyId: Yup.string().required("Required"),
+  applyUrl: Yup.string().required("Required"),
   subCategoryId: Yup.string().required("Required"),
   categoryId: Yup.string().required("Required"),
 });
@@ -72,6 +73,7 @@ const JobList = () => {
           location: undefined,
           categoryId: undefined,
           subCategoryId: undefined,
+          applyUrl: undefined,
           companyId: undefined,
         }}
         validationSchema={DisplayingErrorMessagesSchema}

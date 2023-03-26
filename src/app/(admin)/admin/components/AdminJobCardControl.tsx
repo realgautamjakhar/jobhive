@@ -20,9 +20,13 @@ const AdminJobCardControl = ({ job }) => {
       toast.error(`Something went wrong ${deleteJob?.error?.message}`);
     },
   });
-
   const handleDelete = () => {
     deleteJob.mutateAsync({
+      id: job.id,
+    });
+  };
+  const handleApprove = () => {
+    approveJob.mutateAsync({
       id: job.id,
     });
   };

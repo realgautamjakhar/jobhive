@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { AiFillLinkedin, AiOutlineGlobal } from "react-icons/ai";
 import { motionItem } from "~/utils/animation";
 import type { RouterOutputs } from "~/utils/api";
 
@@ -33,26 +32,6 @@ const CompanyCard = ({ company }: { company: Company }) => {
           <h2 className=" text-lg font-medium capitalize line-clamp-1">
             {company.name.toLowerCase()}
           </h2>
-          {/* <div className="  flex w-full gap-4 text-gray-400 md:justify-center">
-            <a
-              title={`${company.name} website link`}
-              href={company.website}
-              target="_blank"
-            >
-              <AiOutlineGlobal
-                className="  transition-all duration-300 ease-in-out hover:text-accent-500 "
-                size={18}
-              />
-            </a>
-            <a
-              title={`${company.name} linkedin profile link`}
-              href={company.linkedin}
-              target="_blank"
-              className="   transition-all duration-300 ease-in-out hover:text-accent-500 "
-            >
-              <AiFillLinkedin size={18} />
-            </a>
-          </div> */}
         </div>
       </Link>
     </motion.li>

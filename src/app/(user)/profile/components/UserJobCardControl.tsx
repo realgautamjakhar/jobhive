@@ -1,6 +1,5 @@
 "use client";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import ConfirmModal from "~/components/modal/ConfirmModal";
@@ -8,11 +7,10 @@ import { api } from "~/utils/api";
 
 const UserJobCardControl = ({ job }) => {
   const { data: session } = useSession();
-  const router = useRouter();
   const deleteJob = api.job.userJobDelete.useMutation({
     onSuccess: () => {
-      router.refresh();
       toast.success("Job listing Deleted successfully");
+      window.location.reload();
     },
     onError: () => {
       toast.error("Something went wrong");

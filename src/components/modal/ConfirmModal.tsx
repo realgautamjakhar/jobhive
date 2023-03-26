@@ -53,10 +53,10 @@ const ConfirmModal = ({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <div className="fixed inset-0 bg-dark-500 bg-opacity-50" />
+              <div className="fixed inset-0  bg-dark-500 bg-opacity-50" />
             </Transition.Child>
 
-            <div className="fixed inset-0 overflow-y-auto">
+            <div className="fixed inset-0 z-50 overflow-y-auto">
               <div className="flex min-h-full items-center justify-center p-4 text-center">
                 <Transition.Child
                   as={Fragment}
@@ -67,7 +67,7 @@ const ConfirmModal = ({
                   leaveFrom="opacity-100 scale-100"
                   leaveTo="opacity-0 scale-95"
                 >
-                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-md bg-light-100 p-4 px-6 text-left align-middle shadow-xl transition-all dark:bg-dark-500">
+                  <Dialog.Panel className="z-50 w-full max-w-md transform overflow-hidden rounded-md bg-light-100 p-4 px-6 text-left align-middle shadow-xl transition-all dark:bg-dark-500">
                     <Dialog.Title
                       className={" pb-2 text-2xl font-medium text-gray-700"}
                     >

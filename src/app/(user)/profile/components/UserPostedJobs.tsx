@@ -21,7 +21,6 @@ const UserPostedJobs = () => {
         skip: skip,
         userId: session?.user.id,
       });
-      getUserJobs.context;
       setJobs(data.jobs);
       setHasMore(data.hasMore);
     }
@@ -38,6 +37,7 @@ const UserPostedJobs = () => {
           return <JobCard job={job} key={job.id} />;
         })}
       </ul>
+      {jobs?.length === 0 && !getUserJobs.isLoading && <p>No job posted </p>}
       <div className=" my-6 flex justify-between">
         {page > 1 && (
           <SecondaryButton

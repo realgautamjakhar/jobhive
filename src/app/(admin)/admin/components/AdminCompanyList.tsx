@@ -54,7 +54,7 @@ const AdminCompanyList = () => {
           variants={motionContainer}
           initial="hidden"
           animate="visible"
-          className=" grid h-fit w-full  gap-6 md:grid-cols-[repeat(auto-fit,clamp(150px,30vw,175px))]"
+          className=" grid h-fit w-full  gap-6 "
         >
           {companies?.map((company) => {
             return <CompanyCard key={company.id} company={company} />;
