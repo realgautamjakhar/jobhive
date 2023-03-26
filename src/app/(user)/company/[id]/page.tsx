@@ -4,7 +4,6 @@ import { AiFillLinkedin, AiOutlineGlobal } from "react-icons/ai";
 import JobList from "./components/JobList";
 import type { Metadata } from "next";
 import { prisma } from "~/server/db";
-import CompanyAdminControl from "~/app/(admin)/admin/components/CompanyAdminControl";
 
 type Params = {
   params: {
@@ -55,7 +54,6 @@ const CompanyPage = async ({ params: { id } }: Params) => {
   });
   return (
     <main className=" mx-auto h-full w-full max-w-7xl py-10 px-4">
-      <CompanyAdminControl companyId={company.id} />
       <div className=" relative grid grid-cols-[minmax(auto,30%)_1fr] rounded-3xl bg-accentGradient shadow-2xl shadow-accent-100 ">
         <div className="  flex h-full w-full md:bg-white/25">
           <Image

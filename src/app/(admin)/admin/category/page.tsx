@@ -3,17 +3,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 import { toast } from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
-import { BiArrowToBottom, BiDownArrowAlt } from "react-icons/bi";
 import { FiChevronDown } from "react-icons/fi";
-import PrimaryButton from "~/components/button/PrimaryButton";
 import SecondaryButton from "~/components/button/SecondaryButton";
 import { motionContainer, motionItem } from "~/utils/animation";
 import { api } from "~/utils/api";
 
 const CategoryPage = () => {
   const ctx = api.useContext();
-  const { data: categories, refetch: refetchCategory } =
-    api.category.getAll.useQuery();
+  const { data: categories } = api.category.getAll.useQuery();
   const createCategory = api.category.create.useMutation({
     onSuccess: () => {
       toast.success("Category Created SuccessFully");

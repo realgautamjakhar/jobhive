@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -9,12 +8,11 @@ import { api } from "~/utils/api";
 
 const AdminJobCardControl = ({ job }) => {
   const ctx = api.useContext();
-  const router = useRouter();
   const deleteJob = api.job.deleteJob.useMutation({
     onSuccess: () => {
       toast.success("Deleted Successfully");
-      router.refresh();
-      void ctx.job.adminGetAllJobs.invalidate();
+      void ctx.job.adminGetApprovedJobs.invalidate();
+      void ctx.job.adminGetUnApprovedJobs.invalidate();
     },
     onError: () => {
       toast.error(`Something went wrong ${deleteJob?.error?.message}`);
@@ -22,11 +20,6 @@ const AdminJobCardControl = ({ job }) => {
   });
   const handleDelete = () => {
     deleteJob.mutateAsync({
-      id: job.id,
-    });
-  };
-  const handleApprove = () => {
-    approveJob.mutateAsync({
       id: job.id,
     });
   };

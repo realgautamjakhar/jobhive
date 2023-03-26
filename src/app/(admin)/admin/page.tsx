@@ -2,7 +2,7 @@
 import { useSession } from "next-auth/react";
 import { BiAlarm, BiBuildings, BiCategory } from "react-icons/bi";
 import LinkIcon from "~/components/button/LinkIcon";
-import AdminCompanyList from "./components/AdminCompanyList";
+import CompanyList from "~/components/company/CompanyList";
 import ApprovedJobList from "./components/ApprovedJobList";
 import UnApprovedJobList from "./components/UnApprovedJobList";
 
@@ -20,8 +20,8 @@ const AdminPage = () => {
         />
         <LinkIcon href="/admin/category" title="Categories" icon={BiCategory} />
       </div>
-      <div className=" grid grid-cols-[auto_1fr_1fr] gap-6 py-10 px-4">
-        <AdminCompanyList />
+      <div className=" grid gap-6 py-10 px-4 sm:grid-cols-[auto_1fr_1fr]">
+        <CompanyList />
         <ApprovedJobList />
         <UnApprovedJobList />
       </div>

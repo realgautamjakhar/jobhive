@@ -4,7 +4,6 @@ import { prisma } from "~/server/db";
 import JobHeader from "./components/JobHeader";
 import NotApproved from "./components/NotApproved";
 import NotFound from "./components/NotFound";
-import SideBar from "./components/SideBar";
 import SideBarV2 from "./components/SideBarV2";
 
 type Params = {
