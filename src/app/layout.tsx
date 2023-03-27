@@ -15,6 +15,11 @@ const RootLayout = ({
 }) => {
   return (
     <html lang="en">
+      <head>
+        <title>Job Hive</title>
+        <meta name="description" content="Buzzing with Job Opportunity" />
+        <link rel="icon" href="/assets/logo/hexagon.svg" />
+      </head>
       <SessionProvider session={session}>
         <body className="grid min-h-[100dvh] grid-rows-[auto_1fr] bg-light-500">
           <Header />
