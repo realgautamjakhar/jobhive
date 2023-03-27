@@ -19,10 +19,6 @@ export async function generateMetadata({
       id: id,
     },
   });
-  if (!company.name)
-    return {
-      title: "Joh Hive",
-    };
   return {
     title: company.name,
     icons: {
